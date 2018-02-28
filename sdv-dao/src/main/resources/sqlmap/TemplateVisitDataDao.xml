@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lee.sdv.dao.TemplateVisitDataDao">
+    <!--系统生成开始,请勿修改,重新生成会覆盖 -->
+    <!-- template_visit_data 所有查询列 -->
+    <sql id="QUERY_COLUMN_LIST">
+        <![CDATA[
+            t.id AS id,  /*自增ID*/
+            t.visit_id AS visitId,  /*访视ID*/
+            t.data_id AS dataId,  /*数据项ID*/
+            t.is_delete AS isDelete,  /*是否删除，1删除，0未删除*/
+            t.create_id AS createId,  /*创建人*/
+            t.create_time AS createTime,  /*创建时间*/
+            t.update_id AS updateId,  /*修改人*/
+            t.update_time AS updateTime  /*修改时间*/
+        ]]>
+    </sql>
+
+    <!-- template_visit_data 查询列来源表-->
+    <sql id="QUERY_FROM_TABLE"><![CDATA[FROM template_visit_data t]]></sql>
+
+    <!-- 全部条件(更多功能可以通过queryData扩展实现)  -->
+    <sql id="QUERY_WHERE_CLAUSE">
+        <where>
+            <if test="id!= null ">
+                <![CDATA[AND t.id = #{id}]]> /*自增ID*/
+            </if>
+            <if test="visitId!= null ">
+                <![CDATA[AND t.visit_id = #{visitId}]]> /*访视ID*/
+            </if>
+            <if test="dataId!= null ">
+                <![CDATA[AND t.data_id = #{dataId}]]> /*数据项ID*/
+            </if>
+            <if test="isDelete!= null ">
+                <![CDATA[AND t.is_delete = #{isDelete}]]> /*是否删除，1删除，0未删除*/
+            </if>
+            <if test="createId!= null ">
+                <![CDATA[AND t.create_id = #{createId}]]> /*创建人*/
+            </if>
+            <if test="createTime!= null ">
+                <![CDATA[AND t.create_time = #{createTime}]]> /*创建时间*/
+            </if>
+            <if test="updateId!= null ">
+                <![CDATA[AND t.update_id = #{updateId}]]> /*修改人*/
+            </if>
+            <if test="updateTime!= null ">
+                <![CDATA[AND t.update_time = #{updateTime}]]> /*修改时间*/
+            </if>
+
+            <if test="extendMap!=null">
+            </if>
+        </where>
+    </sql>
+
+    <!-- 智能排序与分页 -->
+    <sql id="QUERY_ORDER_LIMIT_CONDTION">
+        <if test="orderField != null and orderField != '' and orderFieldType != null and orderFieldType != ''"><![CDATA[ORDER BY ${orderField} ${orderFieldType}]]></if>
+        <if test="startIndex != null and startIndex &gt;= 0 and pageSize != null and pageSize &gt; 0"><![CDATA[LIMIT #{startIndex},#{pageSize}]]></if>
+    </sql>
+
+    <!-- 更新列字段,只要不为NULL则更新,除开主键列 -->
+    <sql id="UPDATE_COLUMN_SET">
+        <set>
+            <if test="visitId!= null"><![CDATA[ t.visit_id = #{visitId}]]> /*访视ID*/,</if>
+            <if test="dataId!= null"><![CDATA[ t.data_id = #{dataId}]]> /*数据项ID*/,</if>
+            <if test="isDelete!= null"><![CDATA[ t.is_delete = #{isDelete}]]> /*是否删除，1删除，0未删除*/,</if>
+            <if test="createId!= null"><![CDATA[ t.create_id = #{createId}]]> /*创建人*/,</if>
+            <if test="createTime!= null"><![CDATA[ t.create_time = #{createTime}]]> /*创建时间*/,</if>
+            <if test="updateId!= null"><![CDATA[ t.update_id = #{updateId}]]> /*修改人*/,</if>
+            <if test="updateTime!= null"><![CDATA[ t.update_time = #{updateTime}]]> /*修改时间*/,</if>
+        </set>
+    </sql>
+
+    <!-- 插入process_detail记录 -->
+    <insert id="insertEntry" parameterType="com.lee.sdv.domain.TemplateVisitData" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO template_visit_data
+        ( visit_id,  data_id,  is_delete,  create_id,  create_time,  update_id,  update_time   )
+        VALUES
+        (#{visitId}  ,#{dataId}  ,#{isDelete}  ,#{createId}  ,#{createTime}  ,#{updateId}  ,#{updateTime}   )
+    </insert>
+
+    <!-- 删除记录,主键IN(array) -->
+    <delete id="deleteByKey" parameterType="long">
+        <![CDATA[UPDATE  t_sp_product_relationship t ]]>
+        <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[WHERE t.is_delete=0 AND t.id = #{key}]]>
+        
+            
+        
+    </delete>
+
+    <!-- 删除,通过条件 -->
+    <update id="deleteByCondtion" parameterType="com.lee.sdv.domain.TemplateVisitData" >
+        <![CDATA[DELETE FROM ]]>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+    </update>
+
+    <!-- 修改记录通过主键 -->
+    <update id="updateByKey" parameterType="com.lee.sdv.domain.TemplateVisitData" >
+        <![CDATA[UPDATE  template_visit_data t ]]>
+        <include refid="UPDATE_COLUMN_SET"/>
+        <![CDATA[WHERE t.id = #{id}]]>
+    </update>
+
+    <!-- 查询,通过主键 -->
+    <select id="selectEntry" parameterType="long" resultType="com.lee.sdv.domain.TemplateVisitData">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[WHERE t.is_delete=0 AND t.id = #{key}]]>
+        
+            
+        
+    </select>
+
+    <!-- 通过条件查询一个对象 -->
+    <select id="selectOneEntry" parameterType="com.lee.sdv.domain.TemplateVisitData" resultType="com.lee.sdv.domain.TemplateVisitData">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+        <include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+        <![CDATA[ LIMIT 1]]>
+    </select>
+
+    <!-- 查询,通过条件 -->
+    <select id="selectEntryList" parameterType="com.lee.sdv.domain.TemplateVisitData" resultType="com.lee.sdv.domain.TemplateVisitData">
+        <![CDATA[SELECT]]>
+        <include refid="QUERY_COLUMN_LIST"/>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+        <include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+    </select>
+
+    <!-- 总数查询,通过条件 -->
+    <select id="selectEntryListCount" parameterType="com.lee.sdv.domain.TemplateVisitData" resultType="int">
+        <![CDATA[SELECT COUNT(*) AS dataCount]]>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+    </select>
+    <!--系统生成结束,请勿修改,重新生成会覆盖 -->
+
+    <!--自定义开始start -->
+
+    <!--自定义结束end -->
+</mapper>
