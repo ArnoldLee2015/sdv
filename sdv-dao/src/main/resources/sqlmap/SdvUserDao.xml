@@ -9,11 +9,15 @@
             t.id AS id,  /*自增ID*/
             t.name AS name,  /*用户名称*/
             t.wechat_account AS wechatAccount,  /*微信账号*/
+            t.local_session_key AS localSessionKey,  /*系统会话秘钥*/
+            t.expire_date AS expireDate,  /*系统会话秘钥过期时间*/
             t.is_delete AS isDelete,  /*是否删除，1删除，0未删除*/
             t.create_id AS createId,  /*创建人*/
             t.create_time AS createTime,  /*创建时间*/
             t.update_id AS updateId,  /*修改人*/
-            t.update_time AS updateTime  /*修改时间*/
+            t.update_time AS updateTime,  /*修改时间*/
+            t.email AS email,  /*邮箱*/
+            t.mobile AS mobile  /*手机*/
         ]]>
     </sql>
 
@@ -31,6 +35,21 @@
             </if>
             <if test="wechatAccount!= null  and wechatAccount != ''">
                 <![CDATA[AND t.wechat_account = #{wechatAccount}]]> /*微信账号*/
+            </if>
+            <if test="openId!= null  and openId != ''">
+                <![CDATA[AND t.open_id = #{openId}]]> /*微信账号*/
+            </if>
+            <if test="unionId!= null  and unionId != ''">
+                <![CDATA[AND t.union_id = #{unionId}]]> /*微信账号*/
+            </if>
+            <if test="session_key null  and session_key != ''">
+                <![CDATA[AND t.session_key = #{session_key}]]> /*微信账号*/
+            </if>
+            <if test="localSessionKey!= null  and localSessionKey != ''">
+                <![CDATA[AND t.local_session_key = #{localSessionKey}]]> /*微信账号*/
+            </if>
+            <if test="expireDate!= null">
+                <![CDATA[AND t.expire_date = #{expireDate}]]> /*微信账号*/
             </if>
             <if test="isDelete!= null ">
                 <![CDATA[AND t.is_delete = #{isDelete}]]> /*是否删除，1删除，0未删除*/
@@ -64,20 +83,27 @@
         <set>
             <if test="name!= null"><![CDATA[ t.name = #{name}]]> /*用户名称*/,</if>
             <if test="wechatAccount!= null"><![CDATA[ t.wechat_account = #{wechatAccount}]]> /*微信账号*/,</if>
+            <if test="openId != null"><![CDATA[ t.open_id = #{openId}]]> /*微信账号*/,</if>
+            <if test="unionId != null"><![CDATA[ t.union_id = #{unionId}]]> /*微信账号*/,</if>
+            <if test="sessionKey != null"><![CDATA[ t.session_key = #{sessionKey}]]> /*微信账号*/,</if>
+            <if test="localSessionKey != null"><![CDATA[ t.local_session_key = #{localSessionKey}]]> /*微信账号*/,</if>
+            <if test="expireDate != null"><![CDATA[ t.expire_date = #{"expireDate != null"}]]> /*微信账号*/,</if>
             <if test="isDelete!= null"><![CDATA[ t.is_delete = #{isDelete}]]> /*是否删除，1删除，0未删除*/,</if>
             <if test="createId!= null"><![CDATA[ t.create_id = #{createId}]]> /*创建人*/,</if>
             <if test="createTime!= null"><![CDATA[ t.create_time = #{createTime}]]> /*创建时间*/,</if>
             <if test="updateId!= null"><![CDATA[ t.update_id = #{updateId}]]> /*修改人*/,</if>
             <if test="updateTime!= null"><![CDATA[ t.update_time = #{updateTime}]]> /*修改时间*/,</if>
+            <if test="email!= null"><![CDATA[ t.email = #{email}]]> /*邮箱*/,</if>
+            <if test="mobile!= null"><![CDATA[ t.mobile = #{mobile}]]> /*手机*/,</if>
         </set>
     </sql>
 
     <!-- 插入process_detail记录 -->
     <insert id="insertEntry" parameterType="com.lee.sdv.domain.SdvUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sdv_user
-        ( name,  wechat_account,  is_delete,  create_id,  create_time,  update_id,  update_time   )
+        ( name,  wechat_account,open_id,union_id,session_key,local_session_key,expire_date,  is_delete,  create_id,  create_time,  update_id,  update_time,email, mobile  )
         VALUES
-        (#{name}  ,#{wechatAccount}  ,#{isDelete}  ,#{createId}  ,#{createTime}  ,#{updateId}  ,#{updateTime}   )
+        (#{name}  ,#{wechatAccount} ,#{openId},#{unionId},#{sessionKey},#{localSessionKey},#{expireDate} ,#{isDelete}  ,#{createId}  ,#{createTime}  ,#{updateId}  ,#{updateTime}   ,#{email}   ,#{mobile}   )
     </insert>
 
     <!-- 删除记录,主键IN(array) -->

@@ -26,7 +26,7 @@ public class PatientRecordFile extends BaseDomain {
     /**
      * 附件类型
      */
-    private Integer fileType;
+    private String fileType;
     /**
      * 附件地址
      */
@@ -34,7 +34,7 @@ public class PatientRecordFile extends BaseDomain {
     /**
      * 是否删除，1删除，0未删除
      */
-    private Integer isDelete;
+    private Integer isDelete=0;
     /**
      * 创建人
      */
@@ -95,7 +95,7 @@ public class PatientRecordFile extends BaseDomain {
      *
      * @return
      */
-    public Integer getFileType(){
+    public String getFileType(){
         return fileType;
     }
 
@@ -104,7 +104,7 @@ public class PatientRecordFile extends BaseDomain {
      *
      * @param fileType 附件类型
      */
-    public void setFileType (Integer fileType){
+    public void setFileType (String fileType){
         this.fileType = fileType;
     }
     /**

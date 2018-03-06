@@ -4,6 +4,8 @@
  */
 package com.lee.sdv.dao;
 
+import java.util.List;
+
 import com.lee.sdv.domain.SdvPatientRecord;
 import com.lee.sdv.dao.base.BaseDao;
 
@@ -11,6 +13,6 @@ import com.lee.sdv.dao.base.BaseDao;
  * @author lipeng
  */
 public interface SdvPatientRecordDao extends BaseDao<SdvPatientRecord, Long> {
-    //自定义扩展
-
+	// 自定义扩展
+	public List<SdvPatientRecord> selectDateRecordList(Long patientId, Long templateId, Long visitId);
 }

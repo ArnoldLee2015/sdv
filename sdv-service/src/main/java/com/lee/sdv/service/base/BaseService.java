@@ -10,6 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.lee.sdv.domain.base.BaseDomain;
 import com.lee.sdv.domain.common.Page;
 import com.lee.sdv.manager.base.BaseManager;
 
@@ -22,7 +23,7 @@ import com.lee.sdv.manager.base.BaseManager;
  *            主键
  * @author shiling
  */
-public abstract class BaseService<T, KEY extends Serializable> {
+public abstract class BaseService<T extends BaseDomain, KEY extends Serializable> {
 	protected static final Logger LOG = LoggerFactory.getLogger(BaseService.class);
 
 	/**
@@ -122,8 +123,8 @@ public abstract class BaseService<T, KEY extends Serializable> {
 	 *            查询条件
 	 * @return 分页对象
 	 */
-	public Page<T> selectPage(T condtion, Page<T> page) {
-		return getManager().selectPage(condtion, page);
+	public Page<T> selectPage(T condtion) {
+		return getManager().selectPage(condtion);
 	}
 
 	/**

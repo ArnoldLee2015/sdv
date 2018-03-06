@@ -8,6 +8,7 @@ import com.lee.sdv.domain.SdvUser;
 import com.lee.sdv.manager.SdvUserManager;
 import com.lee.sdv.manager.base.BaseManager;
 import com.lee.sdv.service.base.BaseService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +17,19 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SdvUserService extends BaseService<SdvUser, Long> {
-    @Autowired
-    private SdvUserManager sdvUserManager;
+	@Autowired
+	private SdvUserManager sdvUserManager;
 
-    public BaseManager<SdvUser, Long> getManager() {
-        return sdvUserManager;
-    }
-    //自定义扩展
+	public BaseManager<SdvUser, Long> getManager() {
+		return sdvUserManager;
+	}
 
+	// 自定义扩展
+	public SdvUser selectByLocalSessionKey(String localSessionKey) {
+		return sdvUserManager.selectByLocalSessionKey(localSessionKey);
+	}
+
+	public SdvUser selectByOpenId(String openId) {
+		return sdvUserManager.selectByOpenId(openId);
+	}
 }

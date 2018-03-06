@@ -4,6 +4,8 @@
  */
 package com.lee.sdv.web.controller;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.lee.sdv.domain.SdvUser;
 import com.lee.sdv.service.SdvUserService;
 import com.lee.sdv.web.controller.domain.ResultMessage;
+import com.lee.sdv.web.controller.interceptor.UserContext;
 
 /**
  * 系统用户服务
@@ -41,6 +44,15 @@ public class SdvUserController {
 	public ResultMessage<Long> saveSdvUser(@RequestBody SdvUser t) {
 		ResultMessage<Long> result = ResultMessage.success();
 		try {
+			UserContext user = UserContext.getUserContext();
+			if (t.getId() == null) {
+				t.setIsDelete(0);
+				t.setCreateId(user.getId());
+				t.setCreateTime(new Date());
+			} else {
+				t.setUpdateId(user.getId());
+				t.setUpdateTime(new Date());
+			}
 			sdvUserService.saveOrUpdate(t);
 			result.setData(t.getId());
 		} catch (Exception e) {
@@ -80,4 +92,18 @@ public class SdvUserController {
 		result.setData(sdvUserService.selectEntry(id));
 		return result;
 	}
+
+	/**
+	 * 通过当前登录用户信息
+	 * 
+	 * @return
+	 */
+	@GetMapping("")
+	public ResultMessage<SdvUser> getCurrentSdvUser() {
+		ResultMessage<SdvUser> result = ResultMessage.success();
+		UserContext user = UserContext.getUserContext();
+		result.setData(sdvUserService.selectEntry(user.getId()));
+		return result;
+	}
+
 }

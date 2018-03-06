@@ -49,11 +49,7 @@
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
                 <!-- SQL打印最长时间配置-->
                 <profile.sql.maxSqlTime>1</profile.sql.maxSqlTime>
-                <!--域名 -->
-                <profile.domain.name>test.sdv.lee.com</profile.domain.name>
-                <!--云存储配置-->
-                <profile.jss.accesskey>sfMeWpBbGZjAn9sy</profile.jss.accesskey>
-                <profile.jss.secretkey>987NXAG3UYIWgtyyFLuYx7BPhBkyPmA3kKbZIgNA</profile.jss.secretkey>
+      
         </properties>
 		</profile>
 		<profile>
@@ -77,13 +73,7 @@
 				<!--打包编码 -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-                <!--域名 -->
-                <profile.domain.name>test.sdv.lee.com</profile.domain.name>
-                <!-- SQL打印最长时间配置-->
-                <profile.sql.maxSqlTime>1000</profile.sql.maxSqlTime>
-                <!--云存储配置-->
-                <profile.jss.accesskey>sfMeWpBbGZjAn9sy</profile.jss.accesskey>
-                <profile.jss.secretkey>987NXAG3UYIWgtyyFLuYx7BPhBkyPmA3kKbZIgNA</profile.jss.secretkey>
+          
         </properties>
 		</profile>
 		<profile>
@@ -104,13 +94,7 @@
 				<!--打包编码 -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-                <!--域名 -->
-                <profile.domain.name>sdv.lee.com</profile.domain.name>
-                <!-- SQL打印最长时间配置-->
-                <profile.sql.maxSqlTime>1000</profile.sql.maxSqlTime>
-                <!--云存储配置-->
-                <profile.jss.accesskey>sfMeWpBbGZjAn9sy</profile.jss.accesskey>
-                <profile.jss.secretkey>987NXAG3UYIWgtyyFLuYx7BPhBkyPmA3kKbZIgNA</profile.jss.secretkey>
+     
 			</properties>
 		</profile>
 		<profile>
@@ -131,13 +115,7 @@
 				<!--打包编码 -->
 				<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-                <!--域名 -->
-                <profile.domain.name>sdv.lee.com</profile.domain.name>
-                <!-- SQL打印最长时间配置-->
-                <profile.sql.maxSqlTime>1000</profile.sql.maxSqlTime>
-                <!--云存储配置-->
-                <profile.jss.accesskey>sfMeWpBbGZjAn9sy</profile.jss.accesskey>
-                <profile.jss.secretkey>987NXAG3UYIWgtyyFLuYx7BPhBkyPmA3kKbZIgNA</profile.jss.secretkey>
+          
 			</properties>
 		</profile>
 	</profiles>
@@ -207,7 +185,7 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.2</version>
+            <version>1.9</version>
         </dependency>
 
         <dependency>
@@ -326,12 +304,7 @@
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.2</version>
         </dependency>
-        <!--京东云存储 http://jpcloud.jd.com/pages/viewpage.action?pageId=753819 -->
-        <dependency>
-            <groupId>com.jcloud</groupId>
-            <artifactId>jss-sdk-java</artifactId>
-            <version>1.2.0-SNAPSHOT</version>
-        </dependency>
+    
     </dependencies>
 
     <!-- 插件管理 -->

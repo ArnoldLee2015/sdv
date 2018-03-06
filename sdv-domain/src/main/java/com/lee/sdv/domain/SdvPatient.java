@@ -34,7 +34,7 @@ public class SdvPatient extends BaseDomain {
     /**
      * 是否删除，1删除，0未删除
      */
-    private Integer isDelete;
+    private Integer isDelete=0;
     /**
      * 创建人
      */

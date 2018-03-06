@@ -13,7 +13,8 @@
             t.create_id AS createId,  /*创建人*/
             t.create_time AS createTime,  /*创建时间*/
             t.update_id AS updateId,  /*修改人*/
-            t.update_time AS updateTime  /*修改时间*/
+            t.update_time AS updateTime,  /*修改时间*/
+            d.name AS dataName  /*数据项名称*/
         ]]>
     </sql>
 
@@ -109,6 +110,7 @@
         <![CDATA[SELECT]]>
         <include refid="QUERY_COLUMN_LIST"/>
         <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[LEFT JOIN sdv_template_data d ON d.id = t.data_id]]>
         <![CDATA[WHERE t.is_delete=0 AND t.id = #{key}]]>
         
             
@@ -120,6 +122,7 @@
         <![CDATA[SELECT]]>
         <include refid="QUERY_COLUMN_LIST"/>
         <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[LEFT JOIN sdv_template_data d ON d.id = t.data_id]]>
         <include refid="QUERY_WHERE_CLAUSE"/>
         <include refid="QUERY_ORDER_LIMIT_CONDTION"/>
         <![CDATA[ LIMIT 1]]>
@@ -130,6 +133,7 @@
         <![CDATA[SELECT]]>
         <include refid="QUERY_COLUMN_LIST"/>
         <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[LEFT JOIN sdv_template_data d ON d.id = t.data_id]]>
         <include refid="QUERY_WHERE_CLAUSE"/>
         <include refid="QUERY_ORDER_LIMIT_CONDTION"/>
     </select>

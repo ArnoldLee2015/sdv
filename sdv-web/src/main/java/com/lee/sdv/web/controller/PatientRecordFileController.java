@@ -4,6 +4,7 @@
  */
 package com.lee.sdv.web.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lee.sdv.domain.PatientRecordFile;
 import com.lee.sdv.service.PatientRecordFileService;
 import com.lee.sdv.web.controller.domain.ResultMessage;
+import com.lee.sdv.web.controller.interceptor.UserContext;
 
 /**
  * 患者记录附件服务
@@ -43,6 +45,15 @@ public class PatientRecordFileController {
 	public ResultMessage<Long> savePatientRecordFile(@RequestBody PatientRecordFile t) {
 		ResultMessage<Long> result = ResultMessage.success();
 		try {
+			UserContext user = UserContext.getUserContext();
+			if (t.getId() == null) {
+				t.setIsDelete(0);
+				t.setCreateId(user.getId());
+				t.setCreateTime(new Date());
+			} else {
+				t.setUpdateId(user.getId());
+				t.setUpdateTime(new Date());
+			}
 			patientRecordFileService.saveOrUpdate(t);
 			result.setData(t.getId());
 		} catch (Exception e) {

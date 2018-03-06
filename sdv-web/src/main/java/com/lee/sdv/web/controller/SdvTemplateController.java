@@ -4,6 +4,7 @@
  */
 package com.lee.sdv.web.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.lee.sdv.domain.SdvTemplate;
 import com.lee.sdv.service.SdvTemplateService;
 import com.lee.sdv.web.controller.domain.ResultMessage;
+import com.lee.sdv.web.controller.interceptor.UserContext;
 
 /**
  * SDV模板服务
@@ -43,6 +45,16 @@ public class SdvTemplateController {
 	public ResultMessage<Long> saveSdvTemplate(@RequestBody SdvTemplate t) {
 		ResultMessage<Long> result = ResultMessage.success();
 		try {
+			UserContext user = UserContext.getUserContext();
+			if (t.getId() == null) {
+				t.setOwner(user.getId());
+				t.setIsDelete(0);
+				t.setCreateId(user.getId());
+				t.setCreateTime(new Date());
+			} else {
+				t.setUpdateId(user.getId());
+				t.setUpdateTime(new Date());
+			}
 			sdvTemplateService.saveOrUpdate(t);
 			result.setData(t.getId());
 		} catch (Exception e) {
@@ -93,6 +105,8 @@ public class SdvTemplateController {
 	public ResultMessage<List<SdvTemplate>> getAllSdvTemplate() {
 		ResultMessage<List<SdvTemplate>> result = ResultMessage.success();
 		SdvTemplate condtion = new SdvTemplate();
+		UserContext user = UserContext.getUserContext();
+		condtion.setOwner(user.getId());
 		result.setData(sdvTemplateService.selectEntryList(condtion));
 		return result;
 	}

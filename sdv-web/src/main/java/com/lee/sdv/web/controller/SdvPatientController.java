@@ -4,6 +4,8 @@
  */
 package com.lee.sdv.web.controller;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +13,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.lee.sdv.domain.SdvPatient;
+import com.lee.sdv.domain.common.Page;
 import com.lee.sdv.service.SdvPatientService;
 import com.lee.sdv.web.controller.domain.ResultMessage;
+import com.lee.sdv.web.controller.interceptor.UserContext;
 
 /**
  * 患者服务
@@ -41,6 +46,15 @@ public class SdvPatientController {
 	public ResultMessage<Long> saveSdvPatient(@RequestBody SdvPatient t) {
 		ResultMessage<Long> result = ResultMessage.success();
 		try {
+			UserContext user = UserContext.getUserContext();
+			if (t.getId() == null) {
+				t.setIsDelete(0);
+				t.setCreateId(user.getId());
+				t.setCreateTime(new Date());
+			} else {
+				t.setUpdateId(user.getId());
+				t.setUpdateTime(new Date());
+			}
 			sdvPatientService.saveOrUpdate(t);
 			result.setData(t.getId());
 		} catch (Exception e) {
@@ -80,4 +94,18 @@ public class SdvPatientController {
 		result.setData(sdvPatientService.selectEntry(id));
 		return result;
 	}
+
+	/**
+	 * 分页查询患者信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@PostMapping("")
+	public ResultMessage<Page<SdvPatient>> getSdvPatientPage(@RequestBody SdvPatient condtion) {
+		ResultMessage<Page<SdvPatient>> result = ResultMessage.success();
+		result.setData(sdvPatientService.selectPage(condtion));
+		return result;
+	}
+
 }

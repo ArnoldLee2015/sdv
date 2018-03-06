@@ -13,6 +13,7 @@
             t.data_id AS dataId,  /*数据项ID*/
             t.remark AS remark,  /*访视记录*/
             t.status AS status,  /*数据项状态，0未完成，1完成*/
+            t.end_time AS endTime,  /*数据项完成时间*/
             t.is_delete AS isDelete,  /*是否删除，1删除，0未删除*/
             t.create_id AS createId,  /*创建人*/
             t.create_time AS createTime,  /*创建时间*/
@@ -47,6 +48,9 @@
             </if>
             <if test="status!= null ">
                 <![CDATA[AND t.status = #{status}]]> /*数据项状态，0未完成，1完成*/
+            </if>
+            <if test="endTime!= null ">
+                <![CDATA[AND t.end_time = #{endTime}]]> /*数据项完成时间*/
             </if>
             <if test="isDelete!= null ">
                 <![CDATA[AND t.is_delete = #{isDelete}]]> /*是否删除，1删除，0未删除*/
@@ -84,6 +88,7 @@
             <if test="dataId!= null"><![CDATA[ t.data_id = #{dataId}]]> /*数据项ID*/,</if>
             <if test="remark!= null"><![CDATA[ t.remark = #{remark}]]> /*访视记录*/,</if>
             <if test="status!= null"><![CDATA[ t.status = #{status}]]> /*数据项状态，0未完成，1完成*/,</if>
+            <if test="endTime!= null"><![CDATA[ t.end_time = #{endTime}]]> /*数据项完成时间*/,</if>
             <if test="isDelete!= null"><![CDATA[ t.is_delete = #{isDelete}]]> /*是否删除，1删除，0未删除*/,</if>
             <if test="createId!= null"><![CDATA[ t.create_id = #{createId}]]> /*创建人*/,</if>
             <if test="createTime!= null"><![CDATA[ t.create_time = #{createTime}]]> /*创建时间*/,</if>
@@ -95,9 +100,9 @@
     <!-- 插入process_detail记录 -->
     <insert id="insertEntry" parameterType="com.lee.sdv.domain.SdvPatientRecord" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sdv_patient_record
-        ( sdv_patient_id,  sdv_template_id,  visit_id,  data_id,  remark,  status,  is_delete,  create_id,  create_time,  update_id,  update_time   )
+        ( sdv_patient_id,  sdv_template_id,  visit_id,  data_id,  remark,  status, end_time, is_delete,  create_id,  create_time,  update_id,  update_time   )
         VALUES
-        (#{sdvPatientId}  ,#{sdvTemplateId}  ,#{visitId}  ,#{dataId}  ,#{remark}  ,#{status}  ,#{isDelete}  ,#{createId}  ,#{createTime}  ,#{updateId}  ,#{updateTime}   )
+        (#{sdvPatientId}  ,#{sdvTemplateId}  ,#{visitId}  ,#{dataId}  ,#{remark}  ,#{status}  ,#{endTime}  ,#{isDelete}  ,#{createId}  ,#{createTime}  ,#{updateId}  ,#{updateTime}   )
     </insert>
 
     <!-- 删除记录,主键IN(array) -->
@@ -163,6 +168,26 @@
     <!--系统生成结束,请勿修改,重新生成会覆盖 -->
 
     <!--自定义开始start -->
-
+   <update id="updateByCondtion" parameterType="com.lee.sdv.domain.SdvPatientRecord" >
+        <![CDATA[UPDATE  sdv_patient_record t ]]>
+        <include refid="UPDATE_COLUMN_SET"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+    </update>
     <!--自定义结束end -->
+    <select id="selectDateRecordList" parameterType="com.lee.sdv.domain.SdvPatientRecord" resultType="com.lee.sdv.domain.SdvPatientRecord">
+        <![CDATA[SELECT]]>
+        <![CDATA[
+        	distinct 
+            t.sdv_patient_id AS sdvPatientId,  /*患者ID*/
+            t.sdv_template_id AS sdvTemplateId,  /*模板ID*/
+            t.visit_id AS visitId,  /*访视ID*/
+            t.data_id AS dataId,  /*数据项ID*/
+            t.status AS status,  /*数据项状态，0未完成，1完成*/
+            t.end_time AS endTime  /*数据项完成时间*/
+        ]]>
+        <include refid="QUERY_FROM_TABLE"/>
+        <include refid="QUERY_WHERE_CLAUSE"/>
+        <include refid="QUERY_ORDER_LIMIT_CONDTION"/>
+    </select>
+    
 </mapper>

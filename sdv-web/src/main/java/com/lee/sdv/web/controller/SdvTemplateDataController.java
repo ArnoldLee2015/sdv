@@ -4,6 +4,8 @@
  */
 package com.lee.sdv.web.controller;
 
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.lee.sdv.domain.SdvTemplateData;
 import com.lee.sdv.service.SdvTemplateDataService;
 import com.lee.sdv.web.controller.domain.ResultMessage;
+import com.lee.sdv.web.controller.interceptor.UserContext;
 
 /**
  * SDV模板数据项服务
@@ -41,6 +44,15 @@ public class SdvTemplateDataController {
 	public ResultMessage<Long> saveSdvTemplateData(@RequestBody SdvTemplateData t) {
 		ResultMessage<Long> result = ResultMessage.success();
 		try {
+			UserContext user = UserContext.getUserContext();
+			if (t.getId() == null) {
+				t.setIsDelete(0);
+				t.setCreateId(user.getId());
+				t.setCreateTime(new Date());
+			} else {
+				t.setUpdateId(user.getId());
+				t.setUpdateTime(new Date());
+			}
 			sdvTemplateDataService.saveOrUpdate(t);
 			result.setData(t.getId());
 		} catch (Exception e) {

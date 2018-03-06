@@ -16,12 +16,38 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SdvUserManager extends BaseManager<SdvUser, Long> {
-    @Autowired
-    private SdvUserDao sdvUserDao;
+	@Autowired
+	private SdvUserDao sdvUserDao;
 
-    public BaseDao<SdvUser, Long> getDao() {
-        return sdvUserDao;
-    }
-    //自定义扩展
+	public BaseDao<SdvUser, Long> getDao() {
+		return sdvUserDao;
+	}
 
+	// 自定义扩展
+
+	/**
+	 * 通过系统会话key获取当前用户
+	 * 
+	 * @param localSessionKey
+	 * @return
+	 */
+	public SdvUser selectByLocalSessionKey(String localSessionKey) {
+		SdvUser t = new SdvUser();
+		t.setIsDelete(0);
+		t.setLocalSessionKey(localSessionKey);
+		return sdvUserDao.selectOneEntry(t);
+	}
+
+	/**
+	 * 通过微信用户ID获取当前用户
+	 * 
+	 * @param openId
+	 * @return
+	 */
+	public SdvUser selectByOpenId(String openId) {
+		SdvUser t = new SdvUser();
+		t.setIsDelete(0);
+		t.setOpenId(openId);
+		return sdvUserDao.selectOneEntry(t);
+	}
 }
