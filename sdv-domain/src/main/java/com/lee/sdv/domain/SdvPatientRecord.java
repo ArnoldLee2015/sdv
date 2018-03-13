@@ -34,6 +34,10 @@ public class SdvPatientRecord extends BaseDomain {
 	 */
 	private Long dataId;
 	/**
+	 * 笔记内容
+	 */
+	private String remark;
+	/**
 	 * 数据项状态，0未完成，1完成
 	 */
 	private Integer status;
@@ -44,7 +48,7 @@ public class SdvPatientRecord extends BaseDomain {
 	/**
 	 * 是否删除，1删除，0未删除
 	 */
-	private Integer isDelete=0;
+	private Integer isDelete = 0;
 	/**
 	 * 创建人
 	 */
@@ -140,6 +144,14 @@ public class SdvPatientRecord extends BaseDomain {
 	 */
 	public void setDataId(Long dataId) {
 		this.dataId = dataId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	/**

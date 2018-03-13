@@ -9,7 +9,7 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,9 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.lee.sdv.domain.SdvPatient;
+import com.lee.sdv.domain.SdvPatientRecord;
 import com.lee.sdv.domain.common.Page;
+import com.lee.sdv.service.SdvPatientRecordService;
 import com.lee.sdv.service.SdvPatientService;
 import com.lee.sdv.web.controller.domain.ResultMessage;
 import com.lee.sdv.web.controller.interceptor.UserContext;
@@ -29,12 +32,14 @@ import com.lee.sdv.web.controller.interceptor.UserContext;
  * 
  * @author lipeng
  */
-@Controller
+@RestController
 @RequestMapping(value = "/api/sdvPatient")
 public class SdvPatientController {
 	private static final Logger LOG = LoggerFactory.getLogger(SdvPatientController.class);
 	@Autowired
 	private SdvPatientService sdvPatientService;
+	@Autowired
+	private SdvPatientRecordService sdvPatientRecordService;
 
 	/**
 	 * 新增/修改信息
@@ -43,6 +48,7 @@ public class SdvPatientController {
 	 * @return
 	 */
 	@PutMapping("/save")
+	@Transactional
 	public ResultMessage<Long> saveSdvPatient(@RequestBody SdvPatient t) {
 		ResultMessage<Long> result = ResultMessage.success();
 		try {
@@ -54,6 +60,14 @@ public class SdvPatientController {
 			} else {
 				t.setUpdateId(user.getId());
 				t.setUpdateTime(new Date());
+				SdvPatient old = sdvPatientService.selectEntry(t.getId());
+				// 修改 了患者模板则同时删除之前模板的记录
+				if (old != null && old.getSdvTemplateId() != null && !old.getSdvTemplateId().equals(t.getSdvTemplateId())) {
+					SdvPatientRecord condtion = new SdvPatientRecord();
+					condtion.setSdvPatientId(t.getId());
+					condtion.setSdvTemplateId(old.getSdvTemplateId());
+					sdvPatientRecordService.deleteByCondtion(condtion);
+				}
 			}
 			sdvPatientService.saveOrUpdate(t);
 			result.setData(t.getId());

@@ -9,13 +9,13 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.lee.sdv.domain.SdvUser;
 import com.lee.sdv.service.SdvUserService;
@@ -27,7 +27,7 @@ import com.lee.sdv.web.controller.interceptor.UserContext;
  * 
  * @author lipeng
  */
-@Controller
+@RestController
 @RequestMapping(value = "/api/sdvUser")
 public class SdvUserController {
 	private static final Logger LOG = LoggerFactory.getLogger(SdvUserController.class);

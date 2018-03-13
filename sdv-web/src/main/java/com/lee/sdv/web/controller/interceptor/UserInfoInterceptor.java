@@ -28,19 +28,19 @@ public class UserInfoInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler)
 			throws Exception {
 		try {
-//			// 验证用户是否登录
-//			String localSessionKey = httpServletRequest.getParameter("localSessionKey");
-//			if (Strings.isNullOrEmpty(localSessionKey)) {
-//				this.sendErrorMessage(httpServletRequest, httpServletResponse, "-1");
-//				return false;
-//			}
-//			SdvUser sdvUser = sdvUserService.selectByLocalSessionKey(localSessionKey);
-//			if (sdvUser == null || sdvUser.getExpireDate().before(new Date())) {
-//				this.sendErrorMessage(httpServletRequest, httpServletResponse, "-1");
-//				return false;
-//			}
-//			// 设置请求用户上下文信息
-//			this.setUserContext(sdvUser);
+			// 验证用户是否登录
+			String localSessionKey = httpServletRequest.getHeader("ticekt");
+			if (Strings.isNullOrEmpty(localSessionKey)) {
+				this.sendErrorMessage(httpServletRequest, httpServletResponse, "-1");
+				return false;
+			}
+			SdvUser sdvUser = sdvUserService.selectByLocalSessionKey(localSessionKey);
+			if (sdvUser == null || sdvUser.getExpireDate().before(new Date())) {
+				this.sendErrorMessage(httpServletRequest, httpServletResponse, "-1");
+				return false;
+			}
+			// 设置请求用户上下文信息
+			this.setUserContext(sdvUser);
 			return true;
 		} catch (Exception e) {
 			LOG.error("preHandle error", e);

@@ -39,9 +39,9 @@
 				<sdv.jdbc.datasource.type>dbcp</sdv.jdbc.datasource.type>
 				<!-- 数据库 -->
 				<sdv.jdbc.driver>com.mysql.jdbc.Driver</sdv.jdbc.driver>
-				<sdv.jdbc.url>jdbc:MySql://10.182.85.206:3358/test1?characterEncoding=UTF-8</sdv.jdbc.url>
+				<sdv.jdbc.url>jdbc:MySql://39.107.86.242:3306/sdv?characterEncoding=UTF-8</sdv.jdbc.url>
 				<sdv.jdbc.username>root</sdv.jdbc.username>
-				<sdv.jdbc.password>root123</sdv.jdbc.password>
+				<sdv.jdbc.password>root@123</sdv.jdbc.password>
 				<!-- 日志 -->
 				<sdv.log.level>DEBUG</sdv.log.level>
 				<sdv.log.path>/export/logs</sdv.log.path>
@@ -64,9 +64,9 @@
 				<sdv.jdbc.datasource.type>dbcp</sdv.jdbc.datasource.type>
 				<!-- 数据库 -->
 				<sdv.jdbc.driver>com.mysql.jdbc.Driver</sdv.jdbc.driver>
-				<sdv.jdbc.url>jdbc:MySql://10.182.85.206:3358/test1?characterEncoding=UTF-8</sdv.jdbc.url>
+				<sdv.jdbc.url>jdbc:MySql://39.107.86.242:3306/sdv?characterEncoding=UTF-8</sdv.jdbc.url>
 				<sdv.jdbc.username>root</sdv.jdbc.username>
-				<sdv.jdbc.password>root123</sdv.jdbc.password>
+				<sdv.jdbc.password>root@123</sdv.jdbc.password>
 				<!-- 日志 -->
 				<sdv.log.level>DEBUG</sdv.log.level>
 				<sdv.log.path>/export/logs</sdv.log.path>
@@ -85,9 +85,9 @@
 				<sdv.jdbc.datasource.type>dbcp</sdv.jdbc.datasource.type>
 				<!-- 数据库 -->
 				<sdv.jdbc.driver>com.mysql.jdbc.Driver</sdv.jdbc.driver>
-				<sdv.jdbc.url>jdbc:MySql://10.182.85.206:3358/test1?characterEncoding=UTF-8</sdv.jdbc.url>
+				<sdv.jdbc.url>jdbc:MySql://39.107.86.242:3306/sdv?characterEncoding=UTF-8</sdv.jdbc.url>
 				<sdv.jdbc.username>root</sdv.jdbc.username>
-				<sdv.jdbc.password>root123</sdv.jdbc.password>
+				<sdv.jdbc.password>root@123</sdv.jdbc.password>
 				<!-- 日志 -->
 				<sdv.log.level>DEBUG</sdv.log.level>
 				<sdv.log.path>/export/logs</sdv.log.path>
@@ -106,9 +106,9 @@
 				<sdv.jdbc.datasource.type>dbcp</sdv.jdbc.datasource.type>
 				<!-- 数据库 -->
 				<sdv.jdbc.driver>com.mysql.jdbc.Driver</sdv.jdbc.driver>
-				<sdv.jdbc.url>jdbc:MySql://10.182.85.206:3358/test1?characterEncoding=UTF-8</sdv.jdbc.url>
+				<sdv.jdbc.url>jdbc:MySql://39.107.86.242:3306/sdv?characterEncoding=UTF-8</sdv.jdbc.url>
 				<sdv.jdbc.username>root</sdv.jdbc.username>
-				<sdv.jdbc.password>root123</sdv.jdbc.password>
+				<sdv.jdbc.password>root@123</sdv.jdbc.password>
 				<!-- 日志 -->
 				<sdv.log.level>DEBUG</sdv.log.level>
 				<sdv.log.path>/export/logs</sdv.log.path>
@@ -216,7 +216,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>21.0</version>
+            <version>19.0</version>
         </dependency>
         <!-- JSON -->
         <dependency>

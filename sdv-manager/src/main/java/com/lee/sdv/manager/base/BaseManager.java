@@ -71,7 +71,7 @@ public abstract class BaseManager<T extends BaseDomain, KEY extends Serializable
 	 * @return 影响条数
 	 */
 	public int deleteByCondtion(T condtion) {
-		return getDao().deleteByKey(condtion);
+		return getDao().deleteByCondtion(condtion);
 	}
 
 	/**

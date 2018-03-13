@@ -28,6 +28,10 @@ public class SdvPatientRecordManager extends BaseManager<SdvPatientRecord, Long>
 
 	// 自定义扩展
 	public List<SdvPatientRecord> selectDateRecordList(Long patientId, Long templateId, Long visitId) {
-		return sdvPatientRecordDao.selectDateRecordList(patientId, templateId, visitId);
+		SdvPatientRecord sdvPatientRecord = new SdvPatientRecord();
+		sdvPatientRecord.setSdvPatientId(patientId);
+		sdvPatientRecord.setSdvTemplateId(templateId);
+		sdvPatientRecord.setVisitId(visitId);
+		return sdvPatientRecordDao.selectDateRecordList(sdvPatientRecord);
 	}
 }

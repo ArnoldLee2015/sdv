@@ -42,16 +42,6 @@ public abstract class BaseService<T extends BaseDomain, KEY extends Serializable
 	}
 
 	/**
-	 * 添加对象并且设置主键ID值(需要事务支持)
-	 * 
-	 * @param t
-	 * @return
-	 */
-	public int insertEntryCreateId(T t) {
-		return getManager().insertEntryCreateId(t);
-	}
-
-	/**
 	 * 删除对象,主键
 	 * 
 	 * @param key
@@ -103,7 +93,6 @@ public abstract class BaseService<T extends BaseDomain, KEY extends Serializable
 	public T selectEntry(KEY key) {
 		return getManager().selectEntry(key);
 	}
-
 
 	/**
 	 * 查询对象,只要不为NULL与空则为条件

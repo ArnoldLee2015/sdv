@@ -76,7 +76,7 @@ public class FileUploadController {
 		PatientRecordFile patientRecordFile = new PatientRecordFile();
 		patientRecordFile.setFileName(fileName);
 		patientRecordFile.setFileType(fileType);
-		patientRecordFile.setFileUrl(cosClientConfig.getFileUrl() + "/" + cosPath);
+		patientRecordFile.setFileUrl(cosClientConfig.getFileUrl() + cosPath);
 		result.setData(patientRecordFile);
 		return result;
 	}

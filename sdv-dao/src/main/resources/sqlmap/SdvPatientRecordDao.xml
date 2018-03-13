@@ -107,8 +107,7 @@
 
     <!-- 删除记录,主键IN(array) -->
     <delete id="deleteByKey" parameterType="long">
-        <![CDATA[UPDATE  t_sp_product_relationship t ]]>
-        <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[UPDATE  sdv_patient_record t SET t.is_delete=1 ]]>
         <![CDATA[WHERE t.is_delete=0 AND t.id = #{key}]]>
         
             
@@ -117,8 +116,7 @@
 
     <!-- 删除,通过条件 -->
     <update id="deleteByCondtion" parameterType="com.lee.sdv.domain.SdvPatientRecord" >
-        <![CDATA[DELETE FROM ]]>
-        <include refid="QUERY_FROM_TABLE"/>
+        <![CDATA[UPDATE  sdv_patient_record t SET t.is_delete=1 ]]>
         <include refid="QUERY_WHERE_CLAUSE"/>
     </update>
 

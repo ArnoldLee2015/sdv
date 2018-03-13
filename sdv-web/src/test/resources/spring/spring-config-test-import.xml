@@ -8,6 +8,5 @@
     <import resource="classpath*:spring-config-dao.xml"/>
     <import resource="classpath*:spring-config-manager.xml"/>
     <import resource="classpath*:spring-config-service.xml"/>
-    <import resource="classpath:spring/spring-jss.xml"/>
     <!--<import resource="classpath*:spring-config-rpc.xml"/>-->
 </beans>

@@ -4,10 +4,10 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.base.Strings;
 import com.lee.sdv.service.weixin.WeiXinService;
@@ -16,7 +16,7 @@ import com.lee.sdv.web.controller.domain.ResultMessage;
 /**
  * Created by lipeng
  */
-@Controller
+@RestController
 @RequestMapping("/weixin")
 public class WeixinController {
 	private static final Logger LOG = LoggerFactory.getLogger(WeixinController.class);
