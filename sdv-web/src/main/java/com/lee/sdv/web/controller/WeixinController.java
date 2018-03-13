@@ -38,7 +38,11 @@ public class WeixinController {
 		}
 		LOG.error("jscode-----{}", code);
 		ResultMessage<String> result = ResultMessage.success();
-		result.setData(weiXinService.jscode2session(code));
+		String sessionKey = weiXinService.jscode2session(code);
+		if (Strings.isNullOrEmpty(sessionKey)) {
+			return ResultMessage.failure("登录失败");
+		}
+		result.setData(sessionKey);
 		return result;
 	}
 

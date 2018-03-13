@@ -1,16 +1,17 @@
 package com.lee.sdv.demo;
 
-import com.alibaba.fastjson.JSONObject;
-import org.junit.Test;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 测试json
  */
 public class NoSpringTest {
-    @Test
-    public void testJson() {
-        JSONObject json = JSONObject.parseObject("{\"password\":\"123456\",\"username\":\"张三\"}");
-        String password = json.getString("password");
-        System.out.println(password);
-    }
+	// @Test
+	public void testHttp() {
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("startIndex", "0");
+		String result = HttpClientUtil.sendPost("http://127.0.0.1/api/sdvPatient", param);
+		System.out.println(result);
+	}
 }

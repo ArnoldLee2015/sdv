@@ -20,6 +20,7 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
+			<mvc:exclude-mapping path="/**/login/**"/>
 			<mvc:exclude-mapping path="/**/*.html" />
 			<bean class="com.lee.sdv.web.controller.interceptor.UserInfoInterceptor" />
 		</mvc:interceptor>

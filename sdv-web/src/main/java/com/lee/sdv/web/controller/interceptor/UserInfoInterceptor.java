@@ -29,7 +29,7 @@ public class UserInfoInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 		try {
 			// 验证用户是否登录
-			String localSessionKey = httpServletRequest.getHeader("ticekt");
+			String localSessionKey = httpServletRequest.getHeader("ticket");
 			if (Strings.isNullOrEmpty(localSessionKey)) {
 				this.sendErrorMessage(httpServletRequest, httpServletResponse, "-1");
 				return false;
