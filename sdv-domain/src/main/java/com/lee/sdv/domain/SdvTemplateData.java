@@ -5,6 +5,7 @@
 package com.lee.sdv.domain;
 
 import com.lee.sdv.domain.base.BaseDomain;
+import com.lee.sdv.translation.Translation;
 
 import java.util.Date;
 
@@ -181,9 +182,20 @@ public class SdvTemplateData extends BaseDomain {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+
 	/** 系统生成结束,请勿修改,重新生成会覆盖 */
 
 	/** 自定义开始start */
+	@Translation(source = "sdvTemplateId", type = "sdvTemplateName")
+	private String sdvTemplateName;
+
+	public String getSdvTemplateName() {
+		return sdvTemplateName;
+	}
+
+	public void setSdvTemplateName(String sdvTemplateName) {
+		this.sdvTemplateName = sdvTemplateName;
+	}
 
 	/** 自定义结束end */
 }

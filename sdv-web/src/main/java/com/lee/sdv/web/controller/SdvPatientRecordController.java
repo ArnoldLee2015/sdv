@@ -59,6 +59,7 @@ import com.lee.sdv.service.cos.COSClientService;
 import com.lee.sdv.service.cos.domain.COSClientConfig;
 import com.lee.sdv.service.cos.domain.COSResult;
 import com.lee.sdv.service.mail.EmailService;
+import com.lee.sdv.translation.TranslationUtil;
 import com.lee.sdv.web.controller.domain.ResultMessage;
 import com.lee.sdv.web.controller.dto.ExportDateRecordDto;
 import com.lee.sdv.web.controller.interceptor.UserContext;
@@ -170,7 +171,7 @@ public class SdvPatientRecordController {
 	@GetMapping("/{id}")
 	public ResultMessage<SdvPatientRecord> getSdvPatientRecord(@PathVariable("id") Long id) {
 		ResultMessage<SdvPatientRecord> result = ResultMessage.success();
-		result.setData(sdvPatientRecordService.selectEntry(id));
+		result.setData(TranslationUtil.translation(sdvPatientRecordService.selectEntry(id)));
 		return result;
 	}
 
@@ -209,7 +210,7 @@ public class SdvPatientRecordController {
 				}
 			}
 		}
-		result.setData(datas);
+		result.setData(TranslationUtil.translations(datas));
 		return result;
 	}
 
@@ -228,7 +229,7 @@ public class SdvPatientRecordController {
 		}
 		ResultMessage<List<SdvPatientRecord>> result = ResultMessage.success();
 		List<SdvPatientRecord> records = sdvPatientRecordService.selectDateRecordList(sdvPatientId, sdvPatient.getSdvTemplateId(), visitId);
-		result.setData(records);
+		result.setData(TranslationUtil.translations(records));
 		return result;
 	}
 
@@ -265,7 +266,7 @@ public class SdvPatientRecordController {
 				record.setFiles(files);
 			}
 		}
-		result.setData(datas);
+		result.setData(TranslationUtil.translations(datas));
 		return result;
 	}
 

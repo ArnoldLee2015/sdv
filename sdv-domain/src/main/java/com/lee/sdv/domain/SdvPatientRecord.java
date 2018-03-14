@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.lee.sdv.domain.base.BaseDomain;
+import com.lee.sdv.translation.Translation;
 
 /**
  * sdv_patient_record 数据库表名为sdv_patient_record
@@ -21,18 +22,23 @@ public class SdvPatientRecord extends BaseDomain {
 	 * 患者ID
 	 */
 	private Long sdvPatientId;
+
 	/**
 	 * 模板ID
 	 */
 	private Long sdvTemplateId;
+	@Translation(source = "sdvTemplateId", type = "sdvTemplateName")
+	private String sdvTemplateName;
 	/**
 	 * 访视ID
 	 */
 	private Long visitId;
+
 	/**
 	 * 数据项ID
 	 */
 	private Long dataId;
+
 	/**
 	 * 笔记内容
 	 */
@@ -283,6 +289,12 @@ public class SdvPatientRecord extends BaseDomain {
 	 * ISSUE 对应附件列表
 	 */
 	private List<PatientRecordFile> files;
+	@Translation(source = "sdvPatientId", type = "sdvPatientName")
+	private String sdvPatientName;
+	@Translation(source = "visitId", type = "visitName")
+	private String visitName;
+	@Translation(source = "dataId", type = "dataName")
+	private String dataName;
 
 	public List<PatientRecordFile> getFiles() {
 		return files;
@@ -290,6 +302,38 @@ public class SdvPatientRecord extends BaseDomain {
 
 	public void setFiles(List<PatientRecordFile> files) {
 		this.files = files;
+	}
+
+	public String getSdvPatientName() {
+		return sdvPatientName;
+	}
+
+	public void setSdvPatientName(String sdvPatientName) {
+		this.sdvPatientName = sdvPatientName;
+	}
+
+	public String getSdvTemplateName() {
+		return sdvTemplateName;
+	}
+
+	public void setSdvTemplateName(String sdvTemplateName) {
+		this.sdvTemplateName = sdvTemplateName;
+	}
+
+	public String getVisitName() {
+		return visitName;
+	}
+
+	public void setVisitName(String visitName) {
+		this.visitName = visitName;
+	}
+
+	public String getDataName() {
+		return dataName;
+	}
+
+	public void setDataName(String dataName) {
+		this.dataName = dataName;
 	}
 
 	/** 自定义结束end */

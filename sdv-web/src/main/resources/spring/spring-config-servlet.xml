@@ -13,6 +13,7 @@
 
 	<!-- mvc controller -->
 	<context:component-scan base-package="com.lee.sdv.web" />
+	<context:component-scan base-package="com.lee.sdv.translation" />
 	<aop:aspectj-autoproxy proxy-target-class="true" />
 	<context:annotation-config />
 

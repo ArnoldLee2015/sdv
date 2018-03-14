@@ -55,8 +55,13 @@
             <if test="updateTime!= null ">
                 <![CDATA[AND t.update_time = #{updateTime}]]> /*修改时间*/
             </if>
-
             <if test="extendMap!=null">
+            	<if test="extendMap.sdvTemplateIds != null">
+            		and sdv_template_id in 
+    				<foreach collection="extendMap.sdvTemplateIds" item="sdvTemplateId" open=" (" separator="," close=")">
+    					<![CDATA[#{sdvTemplateId}]]>
+    				</foreach>
+            	</if>
             </if>
         </where>
     </sql>

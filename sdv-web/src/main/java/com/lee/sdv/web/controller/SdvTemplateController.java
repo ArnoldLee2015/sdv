@@ -5,21 +5,32 @@
 package com.lee.sdv.web.controller;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lee.sdv.domain.SdvTemplate;
+import com.lee.sdv.domain.SdvTemplateData;
+import com.lee.sdv.domain.SdvTemplateVisit;
+import com.lee.sdv.domain.TemplateVisitData;
+import com.lee.sdv.service.SdvTemplateDataService;
 import com.lee.sdv.service.SdvTemplateService;
+import com.lee.sdv.service.SdvTemplateVisitService;
+import com.lee.sdv.service.TemplateVisitDataService;
 import com.lee.sdv.web.controller.domain.ResultMessage;
 import com.lee.sdv.web.controller.interceptor.UserContext;
 
@@ -34,6 +45,12 @@ public class SdvTemplateController {
 	private static final Logger LOG = LoggerFactory.getLogger(SdvTemplateController.class);
 	@Autowired
 	private SdvTemplateService sdvTemplateService;
+	@Autowired
+	private SdvTemplateDataService sdvTemplateDataService;
+	@Autowired
+	private SdvTemplateVisitService sdvTemplateVisitService;
+	@Autowired
+	private TemplateVisitDataService templateVisitDataService;
 
 	/**
 	 * 新增/修改信息
@@ -42,20 +59,68 @@ public class SdvTemplateController {
 	 * @return
 	 */
 	@PutMapping("/save")
+	@Transactional
 	public ResultMessage<Long> saveSdvTemplate(@RequestBody SdvTemplate t) {
 		ResultMessage<Long> result = ResultMessage.success();
 		try {
 			UserContext user = UserContext.getUserContext();
+			Date now = new Date();
 			if (t.getId() == null) {
 				t.setOwner(user.getId());
 				t.setIsDelete(0);
 				t.setCreateId(user.getId());
-				t.setCreateTime(new Date());
+				t.setCreateTime(now);
 			} else {
 				t.setUpdateId(user.getId());
-				t.setUpdateTime(new Date());
+				t.setUpdateTime(now);
 			}
 			sdvTemplateService.saveOrUpdate(t);
+			if (t.getSourceId() != null) {
+				SdvTemplateData condtion1 = new SdvTemplateData();
+				condtion1.setSdvTemplateId(t.getSourceId());
+				List<SdvTemplateData> datas = sdvTemplateDataService.selectEntryList(condtion1);
+				Map<Long, Long> dataIdMap = new HashMap<Long, Long>();
+				if (!CollectionUtils.isEmpty(datas)) {
+					for (SdvTemplateData data : datas) {
+						Long oldId = data.getId();
+						data.setId(null);
+						data.setSdvTemplateId(t.getId());
+						data.setCreateId(user.getId());
+						data.setCreateTime(now);
+						data.setUpdateId(null);
+						data.setUpdateTime(null);
+						sdvTemplateDataService.insertEntry(data);
+						dataIdMap.put(oldId, t.getId());
+					}
+				}
+				SdvTemplateVisit condtion2 = new SdvTemplateVisit();
+				List<SdvTemplateVisit> visits = sdvTemplateVisitService.selectEntryList(condtion2);
+				if (!CollectionUtils.isEmpty(visits)) {
+					for (SdvTemplateVisit visit : visits) {
+						visit.setId(null);
+						visit.setSdvTemplateId(t.getId());
+						visit.setCreateId(user.getId());
+						visit.setCreateTime(now);
+						visit.setUpdateId(null);
+						visit.setUpdateTime(null);
+						sdvTemplateVisitService.insertEntry(visit);
+						TemplateVisitData condtion3 = new TemplateVisitData();
+						List<TemplateVisitData> visitDatas = templateVisitDataService.selectEntryList(condtion3);
+						if (!CollectionUtils.isEmpty(visitDatas)) {
+							for (TemplateVisitData visitData : visitDatas) {
+								visitData.setId(null);
+								visitData.setVisitId(visit.getId());
+								visitData.setDataId(dataIdMap.get(visitData.getDataId()));
+								visitData.setCreateId(user.getId());
+								visitData.setCreateTime(now);
+								visitData.setUpdateId(null);
+								visitData.setUpdateTime(null);
+								templateVisitDataService.insertEntry(visitData);
+							}
+						}
+					}
+				}
+			}
 			result.setData(t.getId());
 		} catch (Exception e) {
 			LOG.error("saveSdvTemplate error[{}]", e.getMessage(), e);
@@ -101,7 +166,7 @@ public class SdvTemplateController {
 	 * @param id
 	 * @return
 	 */
-	@GetMapping("")
+	@PostMapping("")
 	public ResultMessage<List<SdvTemplate>> getAllSdvTemplate() {
 		ResultMessage<List<SdvTemplate>> result = ResultMessage.success();
 		SdvTemplate condtion = new SdvTemplate();

@@ -1,21 +1,17 @@
 package com.lee.sdv.demo;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.ParseException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import com.alibaba.fastjson.JSON;
@@ -25,7 +21,16 @@ import com.alibaba.fastjson.JSON;
  */
 public class HttpClientUtil {
 
-	private static final CloseableHttpClient httpclient = HttpClients.createDefault();
+	private static final CloseableHttpClient httpclient;
+	private static String ticket = "2fd88cb4939e4eed9b5991222eab491e";
+	static {
+		// HttpHost proxy = new HttpHost("127.0.0.1", 8888);
+		// RequestConfig requestConfig =
+		// RequestConfig.custom().setProxy(proxy).build();
+		// httpclient =
+		// HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
+		httpclient = HttpClientBuilder.create().build();
+	}
 
 	/**
 	 * 发送HttpGet请求
@@ -36,6 +41,7 @@ public class HttpClientUtil {
 	public static String sendGet(String url) {
 
 		HttpGet httpget = new HttpGet(url);
+		httpget.setHeader("ticket", ticket);
 		CloseableHttpResponse response = null;
 		try {
 			response = httpclient.execute(httpget);
@@ -67,10 +73,10 @@ public class HttpClientUtil {
 	 * @param map
 	 * @return
 	 */
-	public static String sendPost(String url, Map<String, String> map) {
+	public static String sendPost(String url, Object map) {
 		StringEntity entity = new StringEntity(JSON.toJSONString(map), Consts.UTF_8);
 		HttpPost httppost = new HttpPost(url);
-		httppost.setHeader("ticket", "4acad53abfcf4ab9af0e07feb01f9e95");
+		httppost.setHeader("ticket", ticket);
 		httppost.setHeader("Content-Type", "application/json; charset=utf8");
 		httppost.setEntity(entity);
 		CloseableHttpResponse response = null;
@@ -83,7 +89,36 @@ public class HttpClientUtil {
 		String result = null;
 		try {
 			result = EntityUtils.toString(entity1);
-		} catch (ParseException | IOException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	/**
+	 * 发送HttpPost请求，参数为map
+	 * 
+	 * @param url
+	 * @param map
+	 * @return
+	 */
+	public static String sendPut(String url, Object map) {
+		StringEntity entity = new StringEntity(JSON.toJSONString(map), Consts.UTF_8);
+		HttpPut httpput = new HttpPut(url);
+		httpput.setHeader("ticket", ticket);
+		httpput.setHeader("Content-Type", "application/json; charset=utf8");
+		httpput.setEntity(entity);
+		CloseableHttpResponse response = null;
+		try {
+			response = httpclient.execute(httpput);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		HttpEntity entity1 = response.getEntity();
+		String result = null;
+		try {
+			result = EntityUtils.toString(entity1);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
@@ -97,6 +132,7 @@ public class HttpClientUtil {
 	 */
 	public static String sendPost(String url) {
 		HttpPost httppost = new HttpPost(url);
+		httppost.setHeader("ticket", ticket);
 		CloseableHttpResponse response = null;
 		try {
 			response = httpclient.execute(httppost);
@@ -107,7 +143,7 @@ public class HttpClientUtil {
 		String result = null;
 		try {
 			result = EntityUtils.toString(entity);
-		} catch (ParseException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;

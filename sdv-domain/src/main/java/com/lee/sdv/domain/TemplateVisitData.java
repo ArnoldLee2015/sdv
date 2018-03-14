@@ -4,9 +4,10 @@
  */
 package com.lee.sdv.domain;
 
-import com.lee.sdv.domain.base.BaseDomain;
-
 import java.util.Date;
+
+import com.lee.sdv.domain.base.BaseDomain;
+import com.lee.sdv.translation.Translation;
 
 /**
  * 访视数据项关系表 数据库表名为template_visit_data
@@ -25,10 +26,6 @@ public class TemplateVisitData extends BaseDomain {
 	 */
 	private Long dataId;
 
-	/**
-	 * 数据项名称
-	 */
-	private String dataName;
 	/**
 	 * 是否删除，1删除，0未删除
 	 */
@@ -90,14 +87,6 @@ public class TemplateVisitData extends BaseDomain {
 	 */
 	public void setDataId(Long dataId) {
 		this.dataId = dataId;
-	}
-
-	public String getDataName() {
-		return dataName;
-	}
-
-	public void setDataName(String dataName) {
-		this.dataName = dataName;
 	}
 
 	/**
@@ -194,9 +183,29 @@ public class TemplateVisitData extends BaseDomain {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+
 	/** 系统生成结束,请勿修改,重新生成会覆盖 */
 
 	/** 自定义开始start */
+	@Translation(source = "visitId", type = "visitName")
+	private String visitName;
+	@Translation(source = "dataId", type = "dataName")
+	private String dataName;
 
+	public String getVisitName() {
+		return visitName;
+	}
+
+	public void setVisitName(String visitName) {
+		this.visitName = visitName;
+	}
+
+	public String getDataName() {
+		return dataName;
+	}
+
+	public void setDataName(String dataName) {
+		this.dataName = dataName;
+	}
 	/** 自定义结束end */
 }

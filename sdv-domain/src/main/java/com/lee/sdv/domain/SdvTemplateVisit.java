@@ -5,6 +5,7 @@
 package com.lee.sdv.domain;
 
 import com.lee.sdv.domain.base.BaseDomain;
+import com.lee.sdv.translation.Translation;
 
 import java.util.Date;
 
@@ -195,6 +196,9 @@ public class SdvTemplateVisit extends BaseDomain {
 	 */
 	private Integer allCount;
 
+	@Translation(source = "sdvTemplateId", type = "sdvTemplateName")
+	private String sdvTemplateName;
+
 	public Integer getEndCount() {
 		return endCount;
 	}
@@ -209,6 +213,14 @@ public class SdvTemplateVisit extends BaseDomain {
 
 	public void setAllCount(Integer allCount) {
 		this.allCount = allCount;
+	}
+
+	public String getSdvTemplateName() {
+		return sdvTemplateName;
+	}
+
+	public void setSdvTemplateName(String sdvTemplateName) {
+		this.sdvTemplateName = sdvTemplateName;
 	}
 
 	/** 自定义结束end */

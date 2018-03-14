@@ -69,6 +69,18 @@
             </if>
 
             <if test="extendMap!=null">
+	            <if test="extendMap.startDate null ">
+	                <![CDATA[AND t.create_time >= #{extendMap.startDate}]]> /*修改时间*/
+	            </if>
+	            <if test="extendMap.endDate!= null ">
+	                <![CDATA[AND t.create_time < #{extendMap.endDate}]]> /*修改时间*/
+	            </if>
+            	<if test="extendMap.patientIds != null">
+            		and sdv_patient_id in 
+    				<foreach collection="extendMap.patientIds" item="patientId" open=" (" separator="," close=")">
+    					<![CDATA[#{patientId}]]>
+    				</foreach>
+            	</if>
             </if>
         </where>
     </sql>

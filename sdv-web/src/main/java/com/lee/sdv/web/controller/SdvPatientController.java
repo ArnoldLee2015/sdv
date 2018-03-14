@@ -5,11 +5,13 @@
 package com.lee.sdv.web.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ import com.lee.sdv.domain.SdvPatientRecord;
 import com.lee.sdv.domain.common.Page;
 import com.lee.sdv.service.SdvPatientRecordService;
 import com.lee.sdv.service.SdvPatientService;
+import com.lee.sdv.translation.TranslationUtil;
 import com.lee.sdv.web.controller.domain.ResultMessage;
 import com.lee.sdv.web.controller.interceptor.UserContext;
 
@@ -53,11 +56,20 @@ public class SdvPatientController {
 		ResultMessage<Long> result = ResultMessage.success();
 		try {
 			UserContext user = UserContext.getUserContext();
+			SdvPatient condtion1 = new SdvPatient();
+			condtion1.setPatientNo(t.getPatientNo());
+			List<SdvPatient> temp = sdvPatientService.selectEntryList(condtion1);
 			if (t.getId() == null) {
+				if (!CollectionUtils.isEmpty(temp)) {
+					return ResultMessage.failure("患者已存在");
+				}
 				t.setIsDelete(0);
 				t.setCreateId(user.getId());
 				t.setCreateTime(new Date());
 			} else {
+				if (!CollectionUtils.isEmpty(temp) && !temp.get(0).getId().equals(t.getId())) {
+					return ResultMessage.failure("患者已存在");
+				}
 				t.setUpdateId(user.getId());
 				t.setUpdateTime(new Date());
 				SdvPatient old = sdvPatientService.selectEntry(t.getId());
@@ -112,13 +124,20 @@ public class SdvPatientController {
 	/**
 	 * 分页查询患者信息
 	 * 
-	 * @param id
+	 * @param condtion
+	 *            多个模板id入参格式：{"extendMap":{"sdvTemplateIds":[1,2,3]}}
 	 * @return
 	 */
 	@PostMapping("")
 	public ResultMessage<Page<SdvPatient>> getSdvPatientPage(@RequestBody SdvPatient condtion) {
 		ResultMessage<Page<SdvPatient>> result = ResultMessage.success();
-		result.setData(sdvPatientService.selectPage(condtion));
+		UserContext user = UserContext.getUserContext();
+		if (user != null) {
+			condtion.setCreateId(user.getId());
+		}
+		Page<SdvPatient> page = sdvPatientService.selectPage(condtion);
+		TranslationUtil.translations(page.getResult());
+		result.setData(page);
 		return result;
 	}
 

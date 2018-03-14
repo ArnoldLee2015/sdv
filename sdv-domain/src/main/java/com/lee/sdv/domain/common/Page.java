@@ -5,6 +5,7 @@
 package com.lee.sdv.domain.common;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class Page<T> implements Serializable {
     private int pageSize = INIT_PAGE_SIZE;
     private int totalCount;
     private int currentPage;
-    private List<T> data;
+    private List<T> data=new ArrayList<T>();
 
     public Page() {
         // 默认构造器

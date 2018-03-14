@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lee.sdv.domain.SdvTemplateVisit;
 import com.lee.sdv.service.SdvTemplateVisitService;
+import com.lee.sdv.translation.TranslationUtil;
 import com.lee.sdv.web.controller.domain.ResultMessage;
 import com.lee.sdv.web.controller.interceptor.UserContext;
 
@@ -89,7 +90,7 @@ public class SdvTemplateVisitController {
 	@GetMapping("/{id}")
 	public ResultMessage<SdvTemplateVisit> getSdvTemplateVisit(@PathVariable("id") Long id) {
 		ResultMessage<SdvTemplateVisit> result = ResultMessage.success();
-		result.setData(sdvTemplateVisitService.selectEntry(id));
+		result.setData(TranslationUtil.translation(sdvTemplateVisitService.selectEntry(id)));
 		return result;
 	}
 
