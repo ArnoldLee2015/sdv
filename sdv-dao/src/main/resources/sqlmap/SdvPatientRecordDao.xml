@@ -69,7 +69,7 @@
             </if>
 
             <if test="extendMap!=null">
-	            <if test="extendMap.startDate null ">
+	            <if test="extendMap.startDate!= null ">
 	                <![CDATA[AND t.create_time >= #{extendMap.startDate}]]> /*修改时间*/
 	            </if>
 	            <if test="extendMap.endDate!= null ">

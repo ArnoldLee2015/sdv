@@ -5,6 +5,7 @@
 package com.lee.sdv.web.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,6 +93,19 @@ public class SdvTemplateDataController {
 	public ResultMessage<SdvTemplateData> getSdvTemplateData(@PathVariable("id") Long id) {
 		ResultMessage<SdvTemplateData> result = ResultMessage.success();
 		result.setData(TranslationUtil.translation(sdvTemplateDataService.selectEntry(id)));
+		return result;
+	}
+
+	/**
+	 * 通过条件查询数据项列表
+	 * 
+	 * @param condtion
+	 * @return
+	 */
+	@PostMapping("")
+	public ResultMessage<List<SdvTemplateData>> getSdvTemplateDataList(@RequestBody SdvTemplateData condtion) {
+		ResultMessage<List<SdvTemplateData>> result = ResultMessage.success();
+		result.setData(TranslationUtil.translations(sdvTemplateDataService.selectEntryList(condtion)));
 		return result;
 	}
 }

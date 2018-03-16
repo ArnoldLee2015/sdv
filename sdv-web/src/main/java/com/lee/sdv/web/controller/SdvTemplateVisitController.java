@@ -5,6 +5,7 @@
 package com.lee.sdv.web.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -94,4 +96,16 @@ public class SdvTemplateVisitController {
 		return result;
 	}
 
+	/**
+	 * 通过条件查询访视记录列表
+	 * 
+	 * @param condtion
+	 * @return
+	 */
+	@PostMapping("")
+	public ResultMessage<List<SdvTemplateVisit>> getSdvTemplateVisitList(@RequestBody SdvTemplateVisit condtion) {
+		ResultMessage<List<SdvTemplateVisit>> result = ResultMessage.success();
+		result.setData(TranslationUtil.translations(sdvTemplateVisitService.selectEntryList(condtion)));
+		return result;
+	}
 }
