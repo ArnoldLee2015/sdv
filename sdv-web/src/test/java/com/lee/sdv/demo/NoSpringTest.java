@@ -32,7 +32,7 @@ public class NoSpringTest {
 		// HttpClientUtil.sendPut("http://127.0.0.1/api/sdvTemplate/save",
 		// param);
 		 result =
-		 HttpClientUtil.sendGet("http://127.0.0.1/api/sdvPatientRecord/patient/14");
+		 HttpClientUtil.sendGet("http://39.107.86.242/api/sdvPatientRecord/patient/14");
 		System.out.println(result);
 	}
 }
