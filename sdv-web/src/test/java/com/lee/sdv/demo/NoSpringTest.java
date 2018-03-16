@@ -25,14 +25,15 @@ public class NoSpringTest {
 		// condtion.getExtendMap().put("sdvTemplateIds", ids);
 		// result =
 		// HttpClientUtil.sendPost("http://39.107.86.242/api/sdvPatientRecord/patient/14", condtion);
-		// param = new HashMap<String, String>();
-		// param.put("sourceId", "1");
-		// param.put("name", "copy");
-		// result =
-		// HttpClientUtil.sendPut("http://127.0.0.1/api/sdvTemplate/save",
-		// param);
+		 param = new HashMap<String, String>();
+		 param.put("sourceId", "1");
+		 param.put("name", "测试模板xxx");
+		 param.put("remark", "简介");
 		 result =
-		 HttpClientUtil.sendGet("http://39.107.86.242/api/sdvPatientRecord/patient/14");
+		 HttpClientUtil.sendPut("http://127.0.0.1/api/sdvTemplate/save",
+		 param);
+//		 result =
+//		 HttpClientUtil.sendGet("http://39.107.86.242/api/sdvPatientRecord/patient/14");
 		System.out.println(result);
 	}
 }

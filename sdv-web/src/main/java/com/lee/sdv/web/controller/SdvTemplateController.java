@@ -94,6 +94,7 @@ public class SdvTemplateController {
 					}
 				}
 				SdvTemplateVisit condtion2 = new SdvTemplateVisit();
+				condtion2.setSdvTemplateId(t.getSourceId());
 				List<SdvTemplateVisit> visits = sdvTemplateVisitService.selectEntryList(condtion2);
 				if (!CollectionUtils.isEmpty(visits)) {
 					for (SdvTemplateVisit visit : visits) {
@@ -105,6 +106,7 @@ public class SdvTemplateController {
 						visit.setUpdateTime(null);
 						sdvTemplateVisitService.insertEntry(visit);
 						TemplateVisitData condtion3 = new TemplateVisitData();
+						condtion3.setVisitId(visit.getId());
 						List<TemplateVisitData> visitDatas = templateVisitDataService.selectEntryList(condtion3);
 						if (!CollectionUtils.isEmpty(visitDatas)) {
 							for (TemplateVisitData visitData : visitDatas) {
