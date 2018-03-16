@@ -29,6 +29,10 @@ public class SdvTemplate extends BaseDomain {
 	 */
 	private Long sourceId;
 	/**
+	 * 模板简介
+	 */
+	private String remark;
+	/**
 	 * 是否删除，1删除，0未删除
 	 */
 	private Integer isDelete = 0;
@@ -108,6 +112,14 @@ public class SdvTemplate extends BaseDomain {
 	 */
 	public void setSourceId(Long sourceId) {
 		this.sourceId = sourceId;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	/**

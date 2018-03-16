@@ -10,6 +10,7 @@
             t.name AS name,  /*模板名称*/
             t.owner AS owner,  /*模板拥有人*/
             t.source_id AS sourceId,  /*模板来源ID*/
+            t.remark AS remark,  /*模板简介*/
             t.is_delete AS isDelete,  /*是否删除，1删除，0未删除*/
             t.create_id AS createId,  /*创建人*/
             t.create_time AS createTime,  /*创建时间*/
@@ -69,6 +70,7 @@
             <if test="name!= null"><![CDATA[ t.name = #{name}]]> /*模板名称*/,</if>
             <if test="owner!= null"><![CDATA[ t.owner = #{owner}]]> /*模板拥有人*/,</if>
             <if test="sourceId!= null"><![CDATA[ t.source_id = #{sourceId}]]> /*模板来源ID*/,</if>
+            <if test="remark!= null"><![CDATA[ t.remark = #{remark}]]> /*模板简介*/,</if>
             <if test="isDelete!= null"><![CDATA[ t.is_delete = #{isDelete}]]> /*是否删除，1删除，0未删除*/,</if>
             <if test="createId!= null"><![CDATA[ t.create_id = #{createId}]]> /*创建人*/,</if>
             <if test="createTime!= null"><![CDATA[ t.create_time = #{createTime}]]> /*创建时间*/,</if>
@@ -80,9 +82,9 @@
     <!-- 插入process_detail记录 -->
     <insert id="insertEntry" parameterType="com.lee.sdv.domain.SdvTemplate" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sdv_template
-        ( name,  owner,  source_id,  is_delete,  create_id,  create_time,  update_id,  update_time   )
+        ( name,  owner,  source_id,  remark,  is_delete,  create_id,  create_time,  update_id,  update_time   )
         VALUES
-        (#{name}  ,#{owner}  ,#{sourceId}  ,#{isDelete}  ,#{createId}  ,#{createTime}  ,#{updateId}  ,#{updateTime}   )
+        (#{name}  ,#{owner}  ,#{sourceId}  ,#{remark},#{isDelete}  ,#{createId}  ,#{createTime}  ,#{updateId}  ,#{updateTime}   )
     </insert>
 
     <!-- 删除记录,主键IN(array) -->
