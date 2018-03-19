@@ -4,6 +4,7 @@
  */
 package com.lee.sdv.web.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ import com.lee.sdv.service.SdvTemplateDataService;
 import com.lee.sdv.service.SdvTemplateService;
 import com.lee.sdv.service.SdvTemplateVisitService;
 import com.lee.sdv.service.TemplateVisitDataService;
+import com.lee.sdv.translation.TranslationUtil;
 import com.lee.sdv.web.controller.domain.ResultMessage;
 import com.lee.sdv.web.controller.interceptor.UserContext;
 
@@ -158,7 +160,30 @@ public class SdvTemplateController {
 	@GetMapping("/{id}")
 	public ResultMessage<SdvTemplate> getSdvTemplate(@PathVariable("id") Long id) {
 		ResultMessage<SdvTemplate> result = ResultMessage.success();
-		result.setData(sdvTemplateService.selectEntry(id));
+		SdvTemplate t = sdvTemplateService.selectEntry(id);
+		if (t != null) {
+			SdvTemplateData condtion1 = new SdvTemplateData();
+			condtion1.setSdvTemplateId(t.getSourceId());
+			List<SdvTemplateData> datas = sdvTemplateDataService.selectEntryList(condtion1);
+			t.setDatas(TranslationUtil.translations(datas));
+			SdvTemplateVisit condtion2 = new SdvTemplateVisit();
+			condtion2.setSdvTemplateId(t.getSourceId());
+			List<SdvTemplateVisit> visits = sdvTemplateVisitService.selectEntryList(condtion2);
+			t.setVisits(TranslationUtil.translations(visits));
+			if (!CollectionUtils.isEmpty(visits)) {
+				List<TemplateVisitData> visitDatas = new ArrayList<TemplateVisitData>();
+				for (SdvTemplateVisit visit : visits) {
+					TemplateVisitData condtion3 = new TemplateVisitData();
+					condtion3.setVisitId(visit.getId());
+					List<TemplateVisitData> visitData = templateVisitDataService.selectEntryList(condtion3);
+					if (!CollectionUtils.isEmpty(visitDatas)) {
+						visitDatas.addAll(visitData);
+					}
+				}
+				t.setVisitDatas(visitDatas);
+			}
+		}
+		result.setData(TranslationUtil.translation(t));
 		return result;
 	}
 
@@ -178,4 +203,20 @@ public class SdvTemplateController {
 		return result;
 	}
 
+	/**
+	 * 检查当前模板是都自己的
+	 * 
+	 * @param id
+	 * @return true 自己的模板，否则不是
+	 */
+	@GetMapping("/checkOwner/{id}")
+	public ResultMessage<Boolean> checkOwner(@PathVariable("id") Long id) {
+		ResultMessage<Boolean> result = ResultMessage.success();
+		result.setData(false);
+		SdvTemplate t = sdvTemplateService.selectEntry(id);
+		if (t != null && t.getOwner().equals(UserContext.getUserContext().getId())) {
+			result.setData(true);
+		}
+		return result;
+	}
 }

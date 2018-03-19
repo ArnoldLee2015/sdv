@@ -4,9 +4,11 @@
  */
 package com.lee.sdv.domain;
 
-import com.lee.sdv.domain.base.BaseDomain;
-
 import java.util.Date;
+import java.util.List;
+
+import com.lee.sdv.domain.base.BaseDomain;
+import com.lee.sdv.translation.Translation;
 
 /**
  * 模板表 数据库表名为sdv_template
@@ -216,9 +218,60 @@ public class SdvTemplate extends BaseDomain {
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
 	}
+
 	/** 系统生成结束,请勿修改,重新生成会覆盖 */
 
 	/** 自定义开始start */
+
+	/**
+	 * 模板拥有人昵称
+	 */
+	@Translation(source = "owner", type = "ownerName")
+	private String ownerName;
+	/**
+	 * 模板访视记录列表
+	 */
+	private List<SdvTemplateVisit> visits;
+	/**
+	 * 模板数据项列表
+	 */
+	private List<SdvTemplateData> datas;
+	/**
+	 * 模板访视记录与数据项关系表
+	 */
+	private List<TemplateVisitData> visitDatas;
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+
+	public List<SdvTemplateVisit> getVisits() {
+		return visits;
+	}
+
+	public void setVisits(List<SdvTemplateVisit> visits) {
+		this.visits = visits;
+	}
+
+	public List<SdvTemplateData> getDatas() {
+		return datas;
+	}
+
+	public void setDatas(List<SdvTemplateData> datas) {
+		this.datas = datas;
+	}
+
+	public List<TemplateVisitData> getVisitDatas() {
+		return visitDatas;
+	}
+
+	public void setVisitDatas(List<TemplateVisitData> visitDatas) {
+		this.visitDatas = visitDatas;
+	}
 
 	/** 自定义结束end */
 }

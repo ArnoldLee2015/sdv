@@ -7,7 +7,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.lee.sdv.domain.SdvPatient;
+import com.lee.sdv.domain.PatientRecordFile;
+import com.lee.sdv.domain.SdvPatientRecord;
 
 /**
  * 测试json
@@ -15,25 +16,33 @@ import com.lee.sdv.domain.SdvPatient;
 public class NoSpringTest {
 	@Test
 	public void testHttp() {
-		Map<String, String> param = new HashMap<String, String>();
-		param.put("startIndex", "0");
-		param.put("extendMap.sdvTemplateIds", "[1,2,3]");
 		String result = "";
 		// SdvPatient condtion = new SdvPatient();
 		// List<Long> ids = new ArrayList<Long>();
 		// ids.add(1l);
 		// condtion.getExtendMap().put("sdvTemplateIds", ids);
 		// result =
-		// HttpClientUtil.sendPost("http://39.107.86.242/api/sdvPatientRecord/patient/14", condtion);
-		 param = new HashMap<String, String>();
-		 param.put("sourceId", "1");
-		 param.put("name", "测试模板xxx");
-		 param.put("remark", "简介");
+		// HttpClientUtil.sendPost("http://39.107.86.242/api/sdvPatientRecord/patient/14",
+		// condtion);
+//		List<SdvPatientRecord> param = new ArrayList<SdvPatientRecord>();
+//		SdvPatientRecord r1 = new SdvPatientRecord();
+//		r1.setId(16l);
+//		r1.setSdvPatientId(14l);
+//		r1.setSdvTemplateId(1l);
+//		r1.setVisitId(1l);
+//		r1.setDataId(1l);
+//		r1.setRemark("ces111");
+//		List<PatientRecordFile> files = new ArrayList<PatientRecordFile>();
+//		PatientRecordFile file = new PatientRecordFile();
+//		file.setFileName("sadasdas");
+//		file.setFileUrl("dfsdfsdf");
+//		files.add(file);
+//		r1.setFiles(files);
+//		param.add(r1);
+//		result = HttpClientUtil.sendPut(
+//				"http://127.0.0.1//api/sdvPatientRecord/save", param);
 		 result =
-		 HttpClientUtil.sendPut("http://127.0.0.1/api/sdvTemplate/save",
-		 param);
-//		 result =
-//		 HttpClientUtil.sendGet("http://39.107.86.242/api/sdvPatientRecord/patient/14");
+		 HttpClientUtil.sendGet("http://127.0.0.1//api/sdvTemplate/1");
 		System.out.println(result);
 	}
 }

@@ -38,4 +38,8 @@ public class SdvPatientRecordService extends BaseService<SdvPatientRecord, Long>
 	public List<SdvPatientRecord> selectDateRecordList(Long patientId, Long templateId, Long visitId) {
 		return sdvPatientRecordManager.selectDateRecordList(patientId, templateId, visitId);
 	}
+	
+	public int updateStatusByCondtion(SdvPatientRecord sdvPatientRecord){
+		return sdvPatientRecordManager.updateStatusByCondtion(sdvPatientRecord);
+	}
 }

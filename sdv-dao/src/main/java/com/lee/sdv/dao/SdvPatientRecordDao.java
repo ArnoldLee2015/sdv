@@ -15,4 +15,6 @@ import com.lee.sdv.dao.base.BaseDao;
 public interface SdvPatientRecordDao extends BaseDao<SdvPatientRecord, Long> {
 	// 自定义扩展
 	public List<SdvPatientRecord> selectDateRecordList(SdvPatientRecord sdvPatientRecord);
+	
+	public int updateStatusByCondtion(SdvPatientRecord sdvPatientRecord);
 }

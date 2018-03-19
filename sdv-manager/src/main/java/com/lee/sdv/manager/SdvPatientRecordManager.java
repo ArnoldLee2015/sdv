@@ -34,4 +34,8 @@ public class SdvPatientRecordManager extends BaseManager<SdvPatientRecord, Long>
 		sdvPatientRecord.setVisitId(visitId);
 		return sdvPatientRecordDao.selectDateRecordList(sdvPatientRecord);
 	}
+	
+	public int updateStatusByCondtion(SdvPatientRecord sdvPatientRecord){
+		return sdvPatientRecordDao.updateStatusByCondtion(sdvPatientRecord);
+	}
 }

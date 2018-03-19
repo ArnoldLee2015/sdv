@@ -48,6 +48,7 @@ import com.lee.sdv.domain.SdvPatientRecord;
 import com.lee.sdv.domain.SdvTemplate;
 import com.lee.sdv.domain.SdvTemplateData;
 import com.lee.sdv.domain.SdvTemplateVisit;
+import com.lee.sdv.domain.TemplateVisitData;
 import com.lee.sdv.service.PatientRecordFileService;
 import com.lee.sdv.service.SdvPatientRecordService;
 import com.lee.sdv.service.SdvPatientService;
@@ -109,7 +110,9 @@ public class SdvPatientRecordController {
 			UserContext user = UserContext.getUserContext();
 			Date now = new Date();
 			if (!CollectionUtils.isEmpty(list)) {
+				Long sdvPatientId = null;
 				for (SdvPatientRecord t : list) {
+					sdvPatientId = t.getSdvPatientId();
 					if (t.getId() == null) {
 						t.setIsDelete(0);
 						t.setCreateId(user.getId());
@@ -135,10 +138,99 @@ public class SdvPatientRecordController {
 						}
 					}
 				}
+				if (sdvPatientId == null) {
+					return ResultMessage.failure("invalid params");
+				}
+				SdvPatient sdvPatient = sdvPatientService.selectEntry(sdvPatientId);
+				if (sdvPatient == null) {
+					return ResultMessage.failure("invalid param sdvPatientId");
+				}
+				sdvPatient.setStatus(1);
+				sdvPatientService.updateByKey(sdvPatient);
 				result.setData(list.size());
 			}
 		} catch (Exception e) {
 			LOG.error("saveSdvPatientRecord error[{}]", e.getMessage(), e);
+			result = ResultMessage.failure("系统错误");
+		}
+		return result;
+	}
+
+	@PutMapping("/status/{sdvPatientId}/{visitId}/{dataId}")
+	@Transactional
+	public ResultMessage<Integer> updateStatus(@PathVariable("sdvPatientId") Long sdvPatientId, @PathVariable("visitId") Long visitId,
+			@PathVariable("dataId") Long dataId) {
+		ResultMessage<Integer> result = ResultMessage.success();
+		try {
+			if (sdvPatientId == null || visitId == null || dataId == null) {
+				return ResultMessage.failure("invalid params");
+			}
+			SdvPatient sdvPatient = sdvPatientService.selectEntry(sdvPatientId);
+			if (sdvPatient == null) {
+				return ResultMessage.failure("invalid param sdvPatientId");
+			}
+			SdvPatientRecord sdvPatientRecord = new SdvPatientRecord();
+			sdvPatientRecord.setSdvPatientId(sdvPatientId);
+			sdvPatientRecord.setSdvTemplateId(sdvPatient.getSdvTemplateId());
+			sdvPatientRecord.setVisitId(visitId);
+			sdvPatientRecord.setDataId(dataId);
+			int count = sdvPatientRecordService.updateStatusByCondtion(sdvPatientRecord);
+			result.setData(count);
+			// 判断整体妆台
+			sdvPatientRecord.setVisitId(null);
+			sdvPatientRecord.setDataId(null);
+			sdvPatientRecord.setStatus(0);
+			List<SdvPatientRecord> records = sdvPatientRecordService.selectEntryList(sdvPatientRecord);
+			if (CollectionUtils.isEmpty(records)) {
+				sdvPatient.setStatus(2);
+				sdvPatientService.updateByKey(sdvPatient);
+			}
+		} catch (Exception e) {
+			LOG.error("updateStatus error[{}]", e.getMessage(), e);
+			result = ResultMessage.failure("系统错误");
+		}
+		return result;
+	}
+
+	@PutMapping("/delete/{sdvPatientId}/{visitId}/{dataId}")
+	@Transactional
+	public ResultMessage<Integer> deleteByDataId(@PathVariable("sdvPatientId") Long sdvPatientId, @PathVariable("visitId") Long visitId,
+			@PathVariable("dataId") Long dataId) {
+		ResultMessage<Integer> result = ResultMessage.success();
+		try {
+			if (sdvPatientId == null || visitId == null || dataId == null) {
+				return ResultMessage.failure("invalid params");
+			}
+			SdvPatient sdvPatient = sdvPatientService.selectEntry(sdvPatientId);
+			if (sdvPatient == null) {
+				return ResultMessage.failure("invalid param sdvPatientId");
+			}
+			SdvPatientRecord sdvPatientRecord = new SdvPatientRecord();
+			sdvPatientRecord.setSdvPatientId(sdvPatientId);
+			sdvPatientRecord.setSdvTemplateId(sdvPatient.getSdvTemplateId());
+			sdvPatientRecord.setVisitId(visitId);
+			sdvPatientRecord.setDataId(dataId);
+			List<SdvPatientRecord> datas = sdvPatientRecordService.selectEntryList(sdvPatientRecord);
+			int count = sdvPatientRecordService.deleteByCondtion(sdvPatientRecord);
+			if (!CollectionUtils.isEmpty(datas)) {
+				PatientRecordFile condtion = new PatientRecordFile();
+				for (SdvPatientRecord r : datas) {
+					condtion.setPatientRecordId(r.getId());
+					patientRecordFileService.deleteByCondtion(condtion);
+				}
+			}
+			result.setData(count);
+			// 判断整体妆台
+			sdvPatientRecord.setVisitId(null);
+			sdvPatientRecord.setDataId(null);
+			sdvPatientRecord.setStatus(0);
+			List<SdvPatientRecord> records = sdvPatientRecordService.selectEntryList(sdvPatientRecord);
+			if (CollectionUtils.isEmpty(records)) {
+				sdvPatient.setStatus(2);
+				sdvPatientService.updateByKey(sdvPatient);
+			}
+		} catch (Exception e) {
+			LOG.error("updateStatus error[{}]", e.getMessage(), e);
 			result = ResultMessage.failure("系统错误");
 		}
 		return result;
@@ -193,20 +285,25 @@ public class SdvPatientRecordController {
 		List<SdvTemplateVisit> datas = sdvTemplateVisitService.selectEntryList(condtion);
 		if (!CollectionUtils.isEmpty(datas)) {
 			for (SdvTemplateVisit data : datas) {
-				List<SdvPatientRecord> records = sdvPatientRecordService.selectDateRecordList(sdvPatientId, data.getSdvTemplateId(),
-						data.getId());
-				if (!CollectionUtils.isEmpty(records)) {
-					data.setAllCount(records.size());
-					int endCount = 0;
-					for (SdvPatientRecord record : records) {
-						if (record.getStatus() != null || record.getStatus() == 1) {
-							endCount++;
-						}
-					}
-					data.setEndCount(endCount);
-				} else {
+				TemplateVisitData condtion3 = new TemplateVisitData();
+				condtion3.setVisitId(data.getId());
+				List<TemplateVisitData> visitDatas = templateVisitDataService.selectEntryList(condtion3);
+				if (CollectionUtils.isEmpty(visitDatas)) {
 					data.setEndCount(0);
 					data.setAllCount(0);
+				} else {
+					data.setAllCount(visitDatas.size());
+					List<SdvPatientRecord> records = sdvPatientRecordService.selectDateRecordList(sdvPatientId, data.getSdvTemplateId(),
+							data.getId());
+					if (!CollectionUtils.isEmpty(records)) {
+						int endCount = 0;
+						for (SdvPatientRecord record : records) {
+							if (record.getStatus() != null || record.getStatus() == 1) {
+								endCount++;
+							}
+						}
+						data.setEndCount(endCount);
+					}
 				}
 			}
 		}
@@ -228,7 +325,32 @@ public class SdvPatientRecordController {
 			return ResultMessage.failure("invalid param sdvPatientId");
 		}
 		ResultMessage<List<SdvPatientRecord>> result = ResultMessage.success();
+		TemplateVisitData condtion3 = new TemplateVisitData();
+		condtion3.setVisitId(visitId);
+		List<TemplateVisitData> visitDatas = templateVisitDataService.selectEntryList(condtion3);
+		if (CollectionUtils.isEmpty(visitDatas)) {
+			result.setData(new ArrayList<SdvPatientRecord>());
+			return result;
+		}
 		List<SdvPatientRecord> records = sdvPatientRecordService.selectDateRecordList(sdvPatientId, sdvPatient.getSdvTemplateId(), visitId);
+		for (TemplateVisitData data : visitDatas) {
+			boolean hasRecord = false;
+			for (SdvPatientRecord r : records) {
+				if (r.getDataId().equals(data.getDataId())) {
+					hasRecord = true;
+					break;
+				}
+			}
+			if (!hasRecord) {
+				SdvPatientRecord sdvPatientRecord = new SdvPatientRecord();
+				sdvPatientRecord.setDataId(data.getDataId());
+				sdvPatientRecord.setSdvPatientId(sdvPatientId);
+				sdvPatientRecord.setSdvTemplateId(sdvPatient.getSdvTemplateId());
+				sdvPatientRecord.setVisitId(visitId);
+				sdvPatientRecord.setStatus(0);
+				records.add(sdvPatientRecord);
+			}
+		}
 		result.setData(TranslationUtil.translations(records));
 		return result;
 	}

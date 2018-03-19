@@ -178,9 +178,9 @@
     <!--系统生成结束,请勿修改,重新生成会覆盖 -->
 
     <!--自定义开始start -->
-   <update id="updateByCondtion" parameterType="com.lee.sdv.domain.SdvPatientRecord" >
+   <update id="updateStatusByCondtion" parameterType="com.lee.sdv.domain.SdvPatientRecord" >
         <![CDATA[UPDATE  sdv_patient_record t ]]>
-        <include refid="UPDATE_COLUMN_SET"/>
+        <![CDATA[SET t.status = 1]]>
         <include refid="QUERY_WHERE_CLAUSE"/>
     </update>
     <!--自定义结束end -->
