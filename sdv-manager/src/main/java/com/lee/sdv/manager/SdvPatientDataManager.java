@@ -7,22 +7,26 @@ package com.lee.sdv.manager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lee.sdv.dao.SdvPatientRecordDao;
+import com.lee.sdv.dao.SdvPatientDataDao;
 import com.lee.sdv.dao.base.BaseDao;
-import com.lee.sdv.domain.SdvPatientRecord;
+import com.lee.sdv.domain.SdvPatientData;
 import com.lee.sdv.manager.base.BaseManager;
 
 /**
  * @author lipeng
  */
 @Service
-public class SdvPatientRecordManager extends BaseManager<SdvPatientRecord, Long> {
+public class SdvPatientDataManager extends BaseManager<SdvPatientData, Long> {
 	@Autowired
-	private SdvPatientRecordDao sdvPatientRecordDao;
+	private SdvPatientDataDao sdvPatientDataDao;
 
-	public BaseDao<SdvPatientRecord, Long> getDao() {
-		return sdvPatientRecordDao;
+	public BaseDao<SdvPatientData, Long> getDao() {
+		return sdvPatientDataDao;
 	}
 
 	// 自定义扩展
+
+	public int updateStatusByCondtion(SdvPatientData sdvPatientData) {
+		return sdvPatientDataDao.updateStatusByCondtion(sdvPatientData);
+	}
 }

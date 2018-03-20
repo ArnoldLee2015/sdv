@@ -82,7 +82,7 @@ public class BusinessServiceTest implements ApplicationContextAware {
 										} else if (t == Long.class) {
 											objArray[i] = 1l;
 										} else {
-											objArray[i] = t.getClass().newInstance();
+											objArray[i] = ((Class<? extends BaseService>) t).newInstance();
 										}
 									}
 									method.invoke(service, objArray);

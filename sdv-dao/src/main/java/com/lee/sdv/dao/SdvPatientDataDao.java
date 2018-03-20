@@ -5,11 +5,12 @@
 package com.lee.sdv.dao;
 
 import com.lee.sdv.dao.base.BaseDao;
-import com.lee.sdv.domain.SdvPatientRecord;
+import com.lee.sdv.domain.SdvPatientData;
 
 /**
  * @author lipeng
  */
-public interface SdvPatientRecordDao extends BaseDao<SdvPatientRecord, Long> {
+public interface SdvPatientDataDao extends BaseDao<SdvPatientData, Long> {
 	// 自定义扩展
+	public int updateStatusByCondtion(SdvPatientData sdvPatientData);
 }

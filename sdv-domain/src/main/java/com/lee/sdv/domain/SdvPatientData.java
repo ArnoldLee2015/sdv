@@ -11,17 +11,13 @@ import com.lee.sdv.domain.base.BaseDomain;
 import com.lee.sdv.translation.Translation;
 
 /**
- * sdv_patient_record 数据库表名为sdv_patient_record
+ * sdv_patient_data 数据库表名为sdv_patient_data
  * 
  * @author lipeng
  */
-public class SdvPatientRecord extends BaseDomain {
+public class SdvPatientData extends BaseDomain {
 	private static final long serialVersionUID = 1L;
 	/** 系统生成开始,请勿修改,重新生成会覆盖 */
-	/**
-	 * 患者数据项ID
-	 */
-	private Long sdvPatientDataId;
 	/**
 	 * 患者ID
 	 */
@@ -43,10 +39,6 @@ public class SdvPatientRecord extends BaseDomain {
 	 */
 	private Long dataId;
 
-	/**
-	 * 笔记内容
-	 */
-	private String remark;
 	/**
 	 * 数据项状态，0未完成，1完成
 	 */
@@ -76,16 +68,8 @@ public class SdvPatientRecord extends BaseDomain {
 	 */
 	private Date updateTime;
 
-	public SdvPatientRecord() {
+	public SdvPatientData() {
 		// 默认无参构造方法
-	}
-
-	public Long getSdvPatientDataId() {
-		return sdvPatientDataId;
-	}
-
-	public void setSdvPatientDataId(Long sdvPatientDataId) {
-		this.sdvPatientDataId = sdvPatientDataId;
 	}
 
 	/**
@@ -162,14 +146,6 @@ public class SdvPatientRecord extends BaseDomain {
 	 */
 	public void setDataId(Long dataId) {
 		this.dataId = dataId;
-	}
-
-	public String getRemark() {
-		return remark;
-	}
-
-	public void setRemark(String remark) {
-		this.remark = remark;
 	}
 
 	/**

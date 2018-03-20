@@ -63,6 +63,7 @@ public class SdvPatientController {
 				if (!CollectionUtils.isEmpty(temp)) {
 					return ResultMessage.failure("患者已存在");
 				}
+				t.setStatus(0);
 				t.setIsDelete(0);
 				t.setCreateId(user.getId());
 				t.setCreateTime(new Date());
