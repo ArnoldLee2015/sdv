@@ -7,8 +7,8 @@ package com.lee.sdv.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lee.sdv.domain.SdvPatientRecord;
-import com.lee.sdv.manager.SdvPatientRecordManager;
+import com.lee.sdv.domain.SdvPatientData;
+import com.lee.sdv.manager.SdvPatientDataManager;
 import com.lee.sdv.manager.base.BaseManager;
 import com.lee.sdv.service.base.BaseService;
 
@@ -16,13 +16,17 @@ import com.lee.sdv.service.base.BaseService;
  * @author lipeng
  */
 @Service
-public class SdvPatientRecordService extends BaseService<SdvPatientRecord, Long> {
+public class SdvPatientDataService extends BaseService<SdvPatientData, Long> {
 	@Autowired
-	private SdvPatientRecordManager sdvPatientRecordManager;
+	private SdvPatientDataManager sdvPatientDataManager;
 
-	public BaseManager<SdvPatientRecord, Long> getManager() {
-		return sdvPatientRecordManager;
+	public BaseManager<SdvPatientData, Long> getManager() {
+		return sdvPatientDataManager;
 	}
 
 	// 自定义扩展
+
+	public int updateStatusByCondtion(SdvPatientData sdvPatientData) {
+		return sdvPatientDataManager.updateStatusByCondtion(sdvPatientData);
+	}
 }

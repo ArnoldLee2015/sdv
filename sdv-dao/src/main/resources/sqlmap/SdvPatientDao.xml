@@ -57,10 +57,13 @@
             </if>
             <if test="extendMap!=null">
             	<if test="extendMap.sdvTemplateIds != null">
-            		and sdv_template_id in 
+            		AND sdv_template_id in 
     				<foreach collection="extendMap.sdvTemplateIds" item="sdvTemplateId" open=" (" separator="," close=")">
     					<![CDATA[#{sdvTemplateId}]]>
     				</foreach>
+            	</if>
+            	<if test="extendMap.searchData != null">
+            		 <![CDATA[ AND (t.patient_no LIKE  concat('%',#{extendMap.searchData},'%') OR t.patient_name LIKE  concat('%',#{extendMap.searchData},'%'))]]>
             	</if>
             </if>
         </where>
