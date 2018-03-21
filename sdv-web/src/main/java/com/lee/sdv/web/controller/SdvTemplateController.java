@@ -46,8 +46,7 @@ import com.lee.sdv.web.controller.interceptor.UserContext;
 @RestController
 @RequestMapping(value = "/api/sdvTemplate")
 public class SdvTemplateController {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(SdvTemplateController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SdvTemplateController.class);
 	@Autowired
 	private SdvTemplateService sdvTemplateService;
 	@Autowired
@@ -71,6 +70,13 @@ public class SdvTemplateController {
 		ResultMessage<Long> result = ResultMessage.success();
 		try {
 			UserContext user = UserContext.getUserContext();
+			SdvTemplate condtion = new SdvTemplate();
+			condtion.setOwner(user.getId());
+			condtion.setName(t.getName());
+			SdvTemplate old = sdvTemplateService.selectOneEntry(condtion);
+			if (old != null && !old.getId().equals(t.getId())) {
+				return ResultMessage.failure("已存在同名的模板");
+			}
 			Date now = new Date();
 			boolean isNew = false;
 			if (t.getId() == null) {
@@ -93,8 +99,7 @@ public class SdvTemplateController {
 				}
 				SdvTemplateData condtion1 = new SdvTemplateData();
 				condtion1.setSdvTemplateId(t.getSourceId());
-				List<SdvTemplateData> datas = sdvTemplateDataService
-						.selectEntryList(condtion1);
+				List<SdvTemplateData> datas = sdvTemplateDataService.selectEntryList(condtion1);
 				Map<Long, Long> dataIdMap = new HashMap<Long, Long>();
 				if (!CollectionUtils.isEmpty(datas)) {
 					for (SdvTemplateData data : datas) {
@@ -111,11 +116,10 @@ public class SdvTemplateController {
 				}
 				SdvTemplateVisit condtion2 = new SdvTemplateVisit();
 				condtion2.setSdvTemplateId(t.getSourceId());
-				List<SdvTemplateVisit> visits = sdvTemplateVisitService
-						.selectEntryList(condtion2);
+				List<SdvTemplateVisit> visits = sdvTemplateVisitService.selectEntryList(condtion2);
 				if (!CollectionUtils.isEmpty(visits)) {
 					for (SdvTemplateVisit visit : visits) {
-						Long visitId= visit.getId();
+						Long visitId = visit.getId();
 						visit.setId(null);
 						visit.setSdvTemplateId(t.getId());
 						visit.setCreateId(user.getId());
@@ -125,14 +129,12 @@ public class SdvTemplateController {
 						sdvTemplateVisitService.insertEntry(visit);
 						TemplateVisitData condtion3 = new TemplateVisitData();
 						condtion3.setVisitId(visitId);
-						List<TemplateVisitData> visitDatas = templateVisitDataService
-								.selectEntryList(condtion3);
+						List<TemplateVisitData> visitDatas = templateVisitDataService.selectEntryList(condtion3);
 						if (!CollectionUtils.isEmpty(visitDatas)) {
 							for (TemplateVisitData visitData : visitDatas) {
 								visitData.setId(null);
 								visitData.setVisitId(visit.getId());
-								visitData.setDataId(dataIdMap.get(visitData
-										.getDataId()));
+								visitData.setDataId(dataIdMap.get(visitData.getDataId()));
 								visitData.setCreateId(user.getId());
 								visitData.setCreateTime(now);
 								visitData.setUpdateId(null);
@@ -182,21 +184,18 @@ public class SdvTemplateController {
 		if (t != null) {
 			SdvTemplateData condtion1 = new SdvTemplateData();
 			condtion1.setSdvTemplateId(t.getSourceId());
-			List<SdvTemplateData> datas = sdvTemplateDataService
-					.selectEntryList(condtion1);
+			List<SdvTemplateData> datas = sdvTemplateDataService.selectEntryList(condtion1);
 			t.setDatas(TranslationUtil.translations(datas));
 			SdvTemplateVisit condtion2 = new SdvTemplateVisit();
 			condtion2.setSdvTemplateId(t.getSourceId());
-			List<SdvTemplateVisit> visits = sdvTemplateVisitService
-					.selectEntryList(condtion2);
+			List<SdvTemplateVisit> visits = sdvTemplateVisitService.selectEntryList(condtion2);
 			t.setVisits(TranslationUtil.translations(visits));
 			if (!CollectionUtils.isEmpty(visits)) {
 				List<TemplateVisitData> visitDatas = new ArrayList<TemplateVisitData>();
 				for (SdvTemplateVisit visit : visits) {
 					TemplateVisitData condtion3 = new TemplateVisitData();
 					condtion3.setVisitId(visit.getId());
-					List<TemplateVisitData> visitData = templateVisitDataService
-							.selectEntryList(condtion3);
+					List<TemplateVisitData> visitData = templateVisitDataService.selectEntryList(condtion3);
 					if (!CollectionUtils.isEmpty(visitData)) {
 						visitDatas.addAll(visitData);
 					}
@@ -235,8 +234,7 @@ public class SdvTemplateController {
 		ResultMessage<Boolean> result = ResultMessage.success();
 		result.setData(false);
 		SdvTemplate t = sdvTemplateService.selectEntry(id);
-		if (t != null
-				&& t.getOwner().equals(UserContext.getUserContext().getId())) {
+		if (t != null && t.getOwner().equals(UserContext.getUserContext().getId())) {
 			result.setData(true);
 		}
 		return result;
