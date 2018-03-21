@@ -276,7 +276,7 @@ public class SdvPatientData extends BaseDomain {
 	/**
 	 * ISSUE 对应附件列表
 	 */
-	private List<PatientRecordFile> files;
+	private List<SdvPatientRecord> records;
 	@Translation(source = "sdvPatientId", type = "sdvPatientName")
 	private String sdvPatientName;
 	@Translation(source = "visitId", type = "visitName")
@@ -284,12 +284,12 @@ public class SdvPatientData extends BaseDomain {
 	@Translation(source = "dataId", type = "dataName")
 	private String dataName;
 
-	public List<PatientRecordFile> getFiles() {
-		return files;
+	public List<SdvPatientRecord> getRecords() {
+		return records;
 	}
 
-	public void setFiles(List<PatientRecordFile> files) {
-		this.files = files;
+	public void setRecords(List<SdvPatientRecord> records) {
+		this.records = records;
 	}
 
 	public String getSdvPatientName() {
