@@ -416,6 +416,12 @@ public class SdvPatientRecordController {
 				sdvPatientData.setSdvTemplateId(sdvPatient.getSdvTemplateId());
 				sdvPatientData.setVisitId(visitId);
 				sdvPatientData.setStatus(0);
+				sdvPatientData.setRecords(new ArrayList<SdvPatientRecord>());
+			} else {
+				SdvPatientRecord condtion = new SdvPatientRecord();
+				condtion.setSdvPatientDataId(sdvPatientData.getId());
+				List<SdvPatientRecord> datas = sdvPatientRecordService.selectEntryList(condtion);
+				sdvPatientData.setRecords(datas);
 			}
 			records.add(sdvPatientData);
 		}

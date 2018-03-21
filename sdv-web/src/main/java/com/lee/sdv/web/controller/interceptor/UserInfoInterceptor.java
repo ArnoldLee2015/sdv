@@ -18,26 +18,40 @@ import com.lee.sdv.domain.SdvUser;
 import com.lee.sdv.service.SdvUserService;
 
 public class UserInfoInterceptor extends HandlerInterceptorAdapter {
-	private static final Logger LOG = LoggerFactory.getLogger(UserInfoInterceptor.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(UserInfoInterceptor.class);
 	@Resource
 	private SdvUserService sdvUserService;
 
 	/**
 	 * 权限拦截处理
 	 */
-	public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler)
+	public boolean preHandle(HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse, Object handler)
 			throws Exception {
 		try {
-			// 验证用户是否登录
+			SdvUser sdvUser = null;
+			// 小程序验证用户是否登录
 			String localSessionKey = httpServletRequest.getHeader("ticket");
+//			localSessionKey="9155dce6cf974199bbcb21e25905f119";
 			if (Strings.isNullOrEmpty(localSessionKey)) {
-				this.sendErrorMessage(httpServletRequest, httpServletResponse, "-1");
-				return false;
-			}
-			SdvUser sdvUser = sdvUserService.selectByLocalSessionKey(localSessionKey);
-			if (sdvUser == null || sdvUser.getExpireDate().before(new Date())) {
-				this.sendErrorMessage(httpServletRequest, httpServletResponse, "-1");
-				return false;
+				// 判断是否web登录
+				sdvUser = (SdvUser) httpServletRequest.getSession()
+						.getAttribute("sdvUser");
+				if (sdvUser == null) {
+					this.sendErrorMessage(httpServletRequest,
+							httpServletResponse, "-1");
+					return false;
+				}
+			} else {
+				sdvUser = sdvUserService
+						.selectByLocalSessionKey(localSessionKey);
+				if (sdvUser == null
+						|| sdvUser.getExpireDate().before(new Date())) {
+					this.sendErrorMessage(httpServletRequest,
+							httpServletResponse, "-1");
+					return false;
+				}
 			}
 			// 设置请求用户上下文信息
 			this.setUserContext(sdvUser);
@@ -48,22 +62,26 @@ public class UserInfoInterceptor extends HandlerInterceptorAdapter {
 		return false;
 	}
 
-	public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler,
+	public void postHandle(HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse, Object handler,
 			ModelAndView modelAndView) throws Exception {
 	}
 
-	public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception e)
+	public void afterCompletion(HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse, Object handler, Exception e)
 			throws Exception {
 		// 清理线程变量
 		UserContext.remove();
 	}
 
-	protected void sendErrorMessage(HttpServletRequest request, HttpServletResponse response, String code) throws IOException {
+	protected void sendErrorMessage(HttpServletRequest request,
+			HttpServletResponse response, String code) throws IOException {
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		response.setContentType("application/json;charset=UTF-8");
-		out.print(new StringBuilder().append("{\"status\":false,\"msg\":\"NoLoginWarning\",\"code\":\"").append(code).append("\"}")
-				.toString());
+		out.print(new StringBuilder()
+				.append("{\"status\":false,\"msg\":\"NoLoginWarning\",\"code\":\"")
+				.append(code).append("\"}").toString());
 		out.flush();
 		out.close();
 	}

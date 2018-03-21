@@ -44,8 +44,13 @@ public class SdvUser extends BaseDomain {
 	 * 系统会话秘钥过期时间
 	 */
 	private Date expireDate;
-	
+	/**
+	 * 用户邮箱
+	 */
 	private String email;
+	/**
+	 * 用户手机
+	 */
 	private String mobile;
 	/**
 	 * 是否删除，1删除，0未删除
@@ -260,8 +265,6 @@ public class SdvUser extends BaseDomain {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	
-	
 	/** 系统生成结束,请勿修改,重新生成会覆盖 */
 
 	/** 自定义开始start */

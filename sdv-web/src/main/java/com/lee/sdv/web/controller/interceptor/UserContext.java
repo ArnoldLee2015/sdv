@@ -40,9 +40,9 @@ public class UserContext {
 		this.name = name;
 	}
 
-	public static ThreadLocal<UserContext> getUser() {
-		return user;
-	}
+//	public static ThreadLocal<UserContext> getUser() {
+//		return user;
+//	}
 
 	/**
 	 * 实际上是将userContext放到了actionContext中

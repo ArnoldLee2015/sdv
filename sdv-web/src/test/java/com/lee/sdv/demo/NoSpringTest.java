@@ -15,14 +15,14 @@ public class NoSpringTest {
 	@Test
 	public void testHttp() {
 		String result = "";
-		ExportDateRecordDto dto = new ExportDateRecordDto();
-		dto.setEmail("arnold_lee@foxmail.com");
-		dto.setStartDate(new Date("2018/03/19"));
-		dto.setEndDate(new Date());
-		List<Long> ids = new ArrayList<Long>();
-		ids.add(1l);
-		dto.setPatientIds(ids);
-		result = HttpClientUtil.sendPost("http://127.0.0.1/api/sdvPatientRecord/export", dto);
+//		ExportDateRecordDto dto = new ExportDateRecordDto();
+//		dto.setEmail("arnold_lee@foxmail.com");
+//		dto.setStartDate(new Date("2018/03/19"));
+//		dto.setEndDate(new Date());
+//		List<Long> ids = new ArrayList<Long>();
+//		ids.add(1l);
+//		dto.setPatientIds(ids);
+//		result = HttpClientUtil.sendPost("http://127.0.0.1/api/sdvPatientRecord/export", dto);
 		// List<SdvPatientRecord> param = new ArrayList<SdvPatientRecord>();
 		// SdvPatientRecord r1 = new SdvPatientRecord();
 		// r1.setId(16l);
@@ -44,8 +44,8 @@ public class NoSpringTest {
 		// sdvTemplate.setSourceId(1l);
 		// result = HttpClientUtil.sendPut(
 		// "http://127.0.0.1//api/sdvPatientRecord/status/1/1/1",null);
-		// result =
-		// HttpClientUtil.sendGet("http://127.0.0.1/api/sdvPatientRecord/patient/1");
-		// System.out.println(result);
+		 result =
+		 HttpClientUtil.sendGet("http://127.0.0.1//weixin/webLoginOut");
+		 System.out.println(result);
 	}
 }
