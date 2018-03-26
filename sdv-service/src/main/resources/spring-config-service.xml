@@ -16,6 +16,9 @@
 				<prop key="mail.smtp.connectiontimeout">10000</prop>
 				<prop key="mail.smtp.timeout">20000</prop>
 				<prop key="mail.smtp.auth">${mail.autoAuth}</prop>
+				<prop key="mail.smtp.socketFactory.port">${mail.port}</prop>
+				<prop key="mail.smtp.socketFactory.fallback">false</prop>
+				<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
 			</props>
 		</property>
 		<property name="host">
