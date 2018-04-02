@@ -58,6 +58,7 @@ public class SdvPatientController {
 			UserContext user = UserContext.getUserContext();
 			SdvPatient condtion1 = new SdvPatient();
 			condtion1.setPatientNo(t.getPatientNo());
+			condtion1.setSdvTemplateId(t.getSdvTemplateId());
 			List<SdvPatient> temp = sdvPatientService.selectEntryList(condtion1);
 			if (t.getId() == null) {
 				if (!CollectionUtils.isEmpty(temp)) {

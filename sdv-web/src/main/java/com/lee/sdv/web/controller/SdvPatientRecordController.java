@@ -44,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSON;
 import com.lee.sdv.domain.PatientRecordFile;
 import com.lee.sdv.domain.SdvPatient;
 import com.lee.sdv.domain.SdvPatientData;
@@ -494,6 +495,7 @@ public class SdvPatientRecordController {
 		condtion.setOrderFieldType("ASC");
 		List<SdvPatientRecord> datas = sdvPatientRecordService.selectEntryList(condtion);
 		if (CollectionUtils.isEmpty(datas)) {
+			LOG.error("export param:{}",JSON.toJSONString(dto));
 			result = ResultMessage.failure("没有符合条件的数据");
 			return result;
 		}
