@@ -122,10 +122,14 @@ public class SdvPatientRecordController {
 			UserContext user = UserContext.getUserContext();
 			Date now = new Date();
 			if (!CollectionUtils.isEmpty(list)) {
-				Long sdvPatientId = null;
+				Long sdvPatientId = list.get(0).getSdvPatientId();
+				SdvPatientRecord delCondition = new SdvPatientRecord();
+				delCondition.setSdvPatientId(sdvPatientId);
+				delCondition.setSdvPatientDataId(list.get(0).getSdvPatientDataId());
+				sdvPatientRecordService.deleteByCondtion(delCondition);
 				SdvPatient sdvPatient = null;
 				for (SdvPatientRecord t : list) {
-					sdvPatientId = t.getSdvPatientId();
+					t.setId(null);
 					if (sdvPatientId == null) {
 						return ResultMessage.failure("invalid params");
 					}

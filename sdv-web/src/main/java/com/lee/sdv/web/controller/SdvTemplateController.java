@@ -24,12 +24,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lee.sdv.domain.SdvPatient;
 import com.lee.sdv.domain.SdvTemplate;
 import com.lee.sdv.domain.SdvTemplateData;
 import com.lee.sdv.domain.SdvTemplateVisit;
 import com.lee.sdv.domain.SdvUser;
 import com.lee.sdv.domain.TemplateVisitData;
 import com.lee.sdv.domain.common.Page;
+import com.lee.sdv.service.SdvPatientService;
 import com.lee.sdv.service.SdvTemplateDataService;
 import com.lee.sdv.service.SdvTemplateService;
 import com.lee.sdv.service.SdvTemplateVisitService;
@@ -59,6 +61,8 @@ public class SdvTemplateController {
 	private TemplateVisitDataService templateVisitDataService;
 	@Autowired
 	private SdvUserService sdvUserService;
+	@Autowired
+	private SdvPatientService sdvPatientService;
 
 	/**
 	 * 新增/修改信息
@@ -76,12 +80,23 @@ public class SdvTemplateController {
 			condtion.setOwner(user.getId());
 			condtion.setName(t.getName());
 			SdvTemplate old = sdvTemplateService.selectOneEntry(condtion);
-			if (t.getIsDelete()!=1&&old != null && !old.getId().equals(t.getId())) {
+			if (t.getIsDelete() != 1 && old != null
+					&& !old.getId().equals(t.getId())) {
 				return ResultMessage.failure("已存在同名的模板");
 			}
 			Date now = new Date();
 			boolean isNew = false;
 			if (t.getId() == null) {
+				// 新增模板不超过5个
+				condtion = new SdvTemplate();
+				condtion.setOwner(user.getId());
+				condtion.setIsDelete(null);
+				// condtion.setSourceId(0l);
+				List<SdvTemplate> count = sdvTemplateService
+						.selectEntryList(condtion);
+				if (count != null && count.size() >= 5) {
+					return ResultMessage.failure("创建的模板不能超过5个");
+				}
 				isNew = true;
 				t.setOwner(user.getId());
 				t.setIsDelete(0);
@@ -151,7 +166,7 @@ public class SdvTemplateController {
 						}
 					}
 				}
-			} else if(isNew){
+			} else if (isNew) {
 				Map<String, Long> visitNameMap = new HashMap<String, Long>();
 				if (!CollectionUtils.isEmpty(t.getVisits())) {
 					for (SdvTemplateVisit visit : t.getVisits()) {
@@ -200,6 +215,12 @@ public class SdvTemplateController {
 	public ResultMessage<Integer> deleteSdvTemplate(@PathVariable("id") Long id) {
 		ResultMessage<Integer> result = ResultMessage.success();
 		try {
+			SdvPatient condtion = new SdvPatient();
+			condtion.setSdvTemplateId(id);
+			List<SdvPatient> list = sdvPatientService.selectEntryList(condtion);
+			if (!CollectionUtils.isEmpty(list)) {
+				return ResultMessage.failure("模板已绑定患者，无法删除");
+			}
 			result.setData(sdvTemplateService.deleteByKey(id));
 		} catch (Exception e) {
 			LOG.error("deleteSdvTemplate error[{}]", e.getMessage(), e);
@@ -237,7 +258,8 @@ public class SdvTemplateController {
 					List<TemplateVisitData> visitData = templateVisitDataService
 							.selectEntryList(condtion3);
 					if (!CollectionUtils.isEmpty(visitData)) {
-						visitDatas.addAll(TranslationUtil.translations(visitData));
+						visitDatas.addAll(TranslationUtil
+								.translations(visitData));
 					}
 				}
 				t.setVisitDatas(visitDatas);

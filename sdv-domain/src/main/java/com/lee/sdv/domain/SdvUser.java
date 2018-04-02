@@ -53,6 +53,18 @@ public class SdvUser extends BaseDomain {
 	 */
 	private String mobile;
 	/**
+	 * 授权令牌
+	 */
+	private String accessToken;
+	/**
+	 * 刷新授权令牌
+	 */
+	private String refreshToken;
+	/**
+	 * 有效时间
+	 */
+	private String expiresIn;
+	/**
 	 * 是否删除，1删除，0未删除
 	 */
 	private Integer isDelete = 0;
@@ -265,6 +277,31 @@ public class SdvUser extends BaseDomain {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
+
+	public String getExpiresIn() {
+		return expiresIn;
+	}
+
+	public void setExpiresIn(String expiresIn) {
+		this.expiresIn = expiresIn;
+	}
+
 	/** 系统生成结束,请勿修改,重新生成会覆盖 */
 
 	/** 自定义开始start */

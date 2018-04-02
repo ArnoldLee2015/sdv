@@ -39,7 +39,7 @@ public class SdvUserManager extends BaseManager<SdvUser, Long> {
 	}
 
 	/**
-	 * 通过微信用户ID获取当前用户
+	 * 通过微信openId获取当前用户
 	 * 
 	 * @param openId
 	 * @return
@@ -48,6 +48,19 @@ public class SdvUserManager extends BaseManager<SdvUser, Long> {
 		SdvUser t = new SdvUser();
 		t.setIsDelete(0);
 		t.setOpenId(openId);
+		return sdvUserDao.selectOneEntry(t);
+	}
+	
+	/**
+	 * 通过微信unionId获取当前用户
+	 * 
+	 * @param unionId
+	 * @return
+	 */
+	public SdvUser selectByUnionid(String unionId) {
+		SdvUser t = new SdvUser();
+		t.setIsDelete(0);
+		t.setUnionId(unionId);;
 		return sdvUserDao.selectOneEntry(t);
 	}
 }

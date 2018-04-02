@@ -37,6 +37,9 @@
             <if test="sourceId!= null ">
                 <![CDATA[AND t.source_id = #{sourceId}]]> /*模板来源ID*/
             </if>
+            <if test="sourceId== 0 ">
+                <![CDATA[AND t.source_id is null]]> /*模板来源ID*/
+            </if>
             <if test="isDelete!= null ">
                 <![CDATA[AND t.is_delete = #{isDelete}]]> /*是否删除，1删除，0未删除*/
             </if>
