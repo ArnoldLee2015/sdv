@@ -139,6 +139,7 @@ public class SdvPatientController {
 		}
 		Page<SdvPatient> page = sdvPatientService.selectPage(condtion);
 		TranslationUtil.translations(page.getResult());
+		page.setPageSize(condtion.getPageSize());
 		result.setData(page);
 		return result;
 	}

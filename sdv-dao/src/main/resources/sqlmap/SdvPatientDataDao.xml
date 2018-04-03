@@ -175,7 +175,10 @@
     <!--自定义开始start -->
    <update id="updateStatusByCondtion" parameterType="com.lee.sdv.domain.SdvPatientData" >
         <![CDATA[UPDATE  sdv_patient_data t ]]>
-        <![CDATA[SET t.status = 1,t.end_time=now(),t.update_time=now(),t.update_id=t.create_id]]>
+        <![CDATA[SET t.update_time=now(),]]>
+        <if test="extendMap.status != null and extendMap.status ==1 "><![CDATA[ t.status = 1,t.end_time=now(),]]></if>
+        <if test="extendMap.status != null and extendMap.status ==0 "><![CDATA[ t.status = 0,t.end_time=null,]]></if>
+        <![CDATA[t.update_id=t.create_id]]>
         <include refid="QUERY_WHERE_CLAUSE"/>
     </update>
     <!--自定义结束end -->

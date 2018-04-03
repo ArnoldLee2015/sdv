@@ -12,10 +12,12 @@ public class NoSpringTest {
 	@Test
 	public void testHttp() {
 		String result = "";
-		Map<String, String> param = new HashMap<String, String>();
-		param.put("departNo", "001");
-		param.put("companyName", "test");
-		result = HttpClientUtil.sendPost("http://10.182.45.120//shop/register/queryMarketMerchantPage", param);
+		// Map<String, String> param = new HashMap<String, String>();
+		// param.put("departNo", "001");
+		// param.put("companyName", "test");
+		// result =
+		// HttpClientUtil.sendPost("http://10.182.45.120//shop/register/queryMarketMerchantPage",
+		// param);
 		// List<SdvPatientRecord> param = new ArrayList<SdvPatientRecord>();
 		// SdvPatientRecord r1 = new SdvPatientRecord();
 		// r1.setId(91l);
@@ -36,8 +38,7 @@ public class NoSpringTest {
 		// sdvTemplate.setName("治疗转移性肾细胞癌II期临床试验");
 		// sdvTemplate.setRemark("尽管目前已有多种VEGF、VEGFR以及mTOR抑制剂获得批准用于转移性肾细胞癌（mRCC）的治疗，但患者的治疗获益已经达到了一个平台期。随着免疫检查点阻断药物mRCC治疗中再度引起关注，新的发展指日可待。抗PD-1通路的单克隆抗体的发展，无论单药或联合，都可能代表着未来的临床突破。");
 		// sdvTemplate.setSourceId(1l);
-		// result = HttpClientUtil.sendPut(
-		// "http://127.0.0.1/api/sdvPatientRecord/save",param);
+//		result = HttpClientUtil.sendPut("http://127.0.0.1/api/sdvPatientRecord/status/119/728/1691/1", null);
 		// result =
 		// HttpClientUtil.sendGet("http://127.0.0.1/api/sdvPatientRecord/patient/1");
 		System.out.println(result);

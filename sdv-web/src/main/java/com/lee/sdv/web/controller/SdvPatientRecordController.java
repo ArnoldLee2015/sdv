@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -126,6 +127,7 @@ public class SdvPatientRecordController {
 				Long sdvPatientId = list.get(0).getSdvPatientId();
 				SdvPatientRecord delCondition = new SdvPatientRecord();
 				delCondition.setSdvPatientId(sdvPatientId);
+				delCondition.setDataId(list.get(0).getDataId());
 				delCondition.setSdvPatientDataId(list.get(0).getSdvPatientDataId());
 				sdvPatientRecordService.deleteByCondtion(delCondition);
 				SdvPatient sdvPatient = null;
@@ -172,7 +174,7 @@ public class SdvPatientRecordController {
 					} else {
 						t.setUpdateId(user.getId());
 						t.setUpdateTime(now);
-						// 删除以后附件
+						// 删除原有附件
 						PatientRecordFile condtion = new PatientRecordFile();
 						condtion.setPatientRecordId(t.getId());
 						patientRecordFileService.deleteByCondtion(condtion);
@@ -208,14 +210,14 @@ public class SdvPatientRecordController {
 		return result;
 	}
 
-	@PutMapping("/status/{sdvPatientId}/{visitId}/{dataId}")
+	@PutMapping("/status/{sdvPatientId}/{visitId}/{dataId}/{status}")
 	@Transactional
 	public ResultMessage<Integer> updateStatus(@PathVariable("sdvPatientId") Long sdvPatientId, @PathVariable("visitId") Long visitId,
-			@PathVariable("dataId") Long dataId) {
+			@PathVariable("dataId") Long dataId, @PathVariable("status") Integer status) {
 		ResultMessage<Integer> result = ResultMessage.success();
 		UserContext user = UserContext.getUserContext();
 		try {
-			if (sdvPatientId == null || visitId == null || dataId == null) {
+			if (sdvPatientId == null || visitId == null || dataId == null || status == null) {
 				return ResultMessage.failure("invalid params");
 			}
 			SdvPatient sdvPatient = sdvPatientService.selectEntry(sdvPatientId);
@@ -227,11 +229,12 @@ public class SdvPatientRecordController {
 			sdvPatientData.setSdvTemplateId(sdvPatient.getSdvTemplateId());
 			sdvPatientData.setVisitId(visitId);
 			sdvPatientData.setDataId(dataId);
+			sdvPatientData.getExtendMap().put("status", status);
 			int count = sdvPatientDataService.updateStatusByCondtion(sdvPatientData);
 			result.setData(count);
 			Date now = new Date();
 			if (count == 0) {
-				sdvPatientData.setStatus(1);
+				sdvPatientData.setStatus(status);
 				sdvPatientData.setEndTime(now);
 				sdvPatientData.setCreateTime(now);
 				sdvPatientData.setCreateId(user.getId());
@@ -486,7 +489,10 @@ public class SdvPatientRecordController {
 			condtion.getExtendMap().put("startDate", dto.getStartDate());
 		}
 		if (dto.getEndDate() != null) {
-			condtion.getExtendMap().put("endDate", dto.getEndDate());
+			Calendar ca = Calendar.getInstance();
+			ca.setTime(dto.getEndDate());
+			ca.add(Calendar.DAY_OF_YEAR, 1);// 查询结果包含结束时间当天数据
+			condtion.getExtendMap().put("endDate", ca.getTime());
 		}
 		if (!CollectionUtils.isEmpty(dto.getPatientIds())) {
 			condtion.getExtendMap().put("patientIds", dto.getPatientIds());
@@ -495,7 +501,7 @@ public class SdvPatientRecordController {
 		condtion.setOrderFieldType("ASC");
 		List<SdvPatientRecord> datas = sdvPatientRecordService.selectEntryList(condtion);
 		if (CollectionUtils.isEmpty(datas)) {
-			LOG.error("export param:{}",JSON.toJSONString(dto));
+			LOG.error("export param:{}", JSON.toJSONString(dto));
 			result = ResultMessage.failure("没有符合条件的数据");
 			return result;
 		}
