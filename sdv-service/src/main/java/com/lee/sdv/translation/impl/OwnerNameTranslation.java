@@ -1,5 +1,8 @@
 package com.lee.sdv.translation.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +31,11 @@ public class OwnerNameTranslation implements TranslationType<Long, String> {
 		if (s == null) {
 			name = k.toString();
 		} else {
-			name = s.getName();
+			try {
+				name = URLDecoder.decode(s.getName(), "utf-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 		}
 		return name;
 	}

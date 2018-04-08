@@ -281,7 +281,7 @@ public class SdvTemplateController {
 		SdvTemplate condtion = new SdvTemplate();
 		UserContext user = UserContext.getUserContext();
 		condtion.setOwner(user.getId());
-		result.setData(sdvTemplateService.selectEntryList(condtion));
+		result.setData(TranslationUtil.translations(sdvTemplateService.selectEntryList(condtion)));
 		return result;
 	}
 

@@ -33,7 +33,6 @@ public class UserInfoInterceptor extends HandlerInterceptorAdapter {
 			SdvUser sdvUser = null;
 			// 小程序验证用户是否登录
 			String localSessionKey = httpServletRequest.getHeader("ticket");
-//			localSessionKey="77ad801d97e742ff915ffc5402542d50";
 			if (Strings.isNullOrEmpty(localSessionKey)) {
 				// 判断是否web登录
 				sdvUser = (SdvUser) httpServletRequest.getSession()

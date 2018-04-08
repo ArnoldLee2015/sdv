@@ -21,9 +21,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lee.sdv.domain.PatientRecordFile;
 import com.lee.sdv.domain.SdvPatient;
+import com.lee.sdv.domain.SdvPatientData;
 import com.lee.sdv.domain.SdvPatientRecord;
 import com.lee.sdv.domain.common.Page;
+import com.lee.sdv.service.PatientRecordFileService;
+import com.lee.sdv.service.SdvPatientDataService;
 import com.lee.sdv.service.SdvPatientRecordService;
 import com.lee.sdv.service.SdvPatientService;
 import com.lee.sdv.translation.TranslationUtil;
@@ -38,11 +42,16 @@ import com.lee.sdv.web.controller.interceptor.UserContext;
 @RestController
 @RequestMapping(value = "/api/sdvPatient")
 public class SdvPatientController {
-	private static final Logger LOG = LoggerFactory.getLogger(SdvPatientController.class);
+	private static final Logger LOG = LoggerFactory
+			.getLogger(SdvPatientController.class);
 	@Autowired
 	private SdvPatientService sdvPatientService;
 	@Autowired
 	private SdvPatientRecordService sdvPatientRecordService;
+	@Autowired
+	private SdvPatientDataService sdvPatientDataService;
+	@Autowired
+	private PatientRecordFileService patientRecordFileService;
 
 	/**
 	 * 新增/修改信息
@@ -59,7 +68,8 @@ public class SdvPatientController {
 			SdvPatient condtion1 = new SdvPatient();
 			condtion1.setPatientNo(t.getPatientNo());
 			condtion1.setSdvTemplateId(t.getSdvTemplateId());
-			List<SdvPatient> temp = sdvPatientService.selectEntryList(condtion1);
+			List<SdvPatient> temp = sdvPatientService
+					.selectEntryList(condtion1);
 			if (t.getId() == null) {
 				if (!CollectionUtils.isEmpty(temp)) {
 					return ResultMessage.failure("患者已存在");
@@ -69,14 +79,16 @@ public class SdvPatientController {
 				t.setCreateId(user.getId());
 				t.setCreateTime(new Date());
 			} else {
-				if (!CollectionUtils.isEmpty(temp) && !temp.get(0).getId().equals(t.getId())) {
+				if (!CollectionUtils.isEmpty(temp)
+						&& !temp.get(0).getId().equals(t.getId())) {
 					return ResultMessage.failure("患者已存在");
 				}
 				t.setUpdateId(user.getId());
 				t.setUpdateTime(new Date());
 				SdvPatient old = sdvPatientService.selectEntry(t.getId());
 				// 修改 了患者模板则同时删除之前模板的记录
-				if (old != null && old.getSdvTemplateId() != null && !old.getSdvTemplateId().equals(t.getSdvTemplateId())) {
+				if (old != null && old.getSdvTemplateId() != null
+						&& !old.getSdvTemplateId().equals(t.getSdvTemplateId())) {
 					SdvPatientRecord condtion = new SdvPatientRecord();
 					condtion.setSdvPatientId(t.getId());
 					condtion.setSdvTemplateId(old.getSdvTemplateId());
@@ -99,10 +111,26 @@ public class SdvPatientController {
 	 * @return
 	 */
 	@DeleteMapping("/delete/{id}")
+	@Transactional
 	public ResultMessage<Integer> deleteSdvPatient(@PathVariable("id") Long id) {
 		ResultMessage<Integer> result = ResultMessage.success();
 		try {
 			result.setData(sdvPatientService.deleteByKey(id));
+			SdvPatientRecord sdvPatientRecord = new SdvPatientRecord();
+			sdvPatientRecord.setSdvPatientId(id);
+			List<SdvPatientRecord> datas = sdvPatientRecordService
+					.selectEntryList(sdvPatientRecord);
+			sdvPatientRecordService.deleteByCondtion(sdvPatientRecord);
+			if (!CollectionUtils.isEmpty(datas)) {
+				PatientRecordFile condtion = new PatientRecordFile();
+				for (SdvPatientRecord r : datas) {
+					condtion.setPatientRecordId(r.getId());
+					patientRecordFileService.deleteByCondtion(condtion);
+				}
+			}
+			SdvPatientData condtion = new SdvPatientData();
+			condtion.setSdvPatientId(id);
+			sdvPatientDataService.deleteByCondtion(condtion);
 		} catch (Exception e) {
 			LOG.error("deleteSdvPatient error[{}]", e.getMessage(), e);
 			result = ResultMessage.failure("系统错误");
@@ -131,7 +159,8 @@ public class SdvPatientController {
 	 * @return
 	 */
 	@PostMapping("")
-	public ResultMessage<Page<SdvPatient>> getSdvPatientPage(@RequestBody SdvPatient condtion) {
+	public ResultMessage<Page<SdvPatient>> getSdvPatientPage(
+			@RequestBody SdvPatient condtion) {
 		ResultMessage<Page<SdvPatient>> result = ResultMessage.success();
 		UserContext user = UserContext.getUserContext();
 		if (user != null) {

@@ -56,7 +56,7 @@
                 <![CDATA[AND t.update_time = #{updateTime}]]> /*修改时间*/
             </if>
             <if test="extendMap!=null">
-            	<if test="extendMap.sdvTemplateIds != null">
+            	<if test="extendMap.sdvTemplateIds != null and extendMap.sdvTemplateIds.size()>0">
             		AND sdv_template_id in 
     				<foreach collection="extendMap.sdvTemplateIds" item="sdvTemplateId" open=" (" separator="," close=")">
     					<![CDATA[#{sdvTemplateId}]]>

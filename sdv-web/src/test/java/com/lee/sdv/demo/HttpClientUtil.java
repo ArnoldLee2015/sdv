@@ -22,7 +22,7 @@ import com.alibaba.fastjson.JSON;
 public class HttpClientUtil {
 
 	private static final CloseableHttpClient httpclient;
-	private static String ticket = "a85893025464414ba3651a2247a0b986";
+	private static String ticket = "6ba29c975c59488e9930516a5217dd38";
 	static {
 		// HttpHost proxy = new HttpHost("127.0.0.1", 8888);
 		// RequestConfig requestConfig =
