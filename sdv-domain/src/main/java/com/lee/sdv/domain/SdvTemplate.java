@@ -226,7 +226,7 @@ public class SdvTemplate extends BaseDomain {
 	/**
 	 * 模板拥有人昵称
 	 */
-	@Translation(source = "owner", type = "ownerName")
+	@Translation(source = "createId", type = "ownerName")
 	private String ownerName;
 	/**
 	 * 模板访视记录列表

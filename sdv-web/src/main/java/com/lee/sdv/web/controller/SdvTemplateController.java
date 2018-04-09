@@ -87,21 +87,29 @@ public class SdvTemplateController {
 			Date now = new Date();
 			boolean isNew = false;
 			if (t.getId() == null) {
-				// 新增模板不超过5个
-				condtion = new SdvTemplate();
-				condtion.setOwner(user.getId());
-				condtion.setIsDelete(null);
-				condtion.setSourceId(0l);
-				List<SdvTemplate> count = sdvTemplateService
-						.selectEntryList(condtion);
-				if (count != null && count.size() >= 5) {
-					return ResultMessage.failure("创建的模板不能超过5个");
-				}
 				isNew = true;
 				t.setOwner(user.getId());
 				t.setIsDelete(0);
-				t.setCreateId(user.getId());
-				t.setCreateTime(now);
+				if(t.getSourceId() == null){
+					// 新增模板不超过5个
+					condtion = new SdvTemplate();
+					condtion.setOwner(user.getId());
+					condtion.setIsDelete(null);
+					condtion.setSourceId(0l);
+					List<SdvTemplate> count = sdvTemplateService
+							.selectEntryList(condtion);
+					if (count != null && count.size() >= 5) {
+						return ResultMessage.failure("创建的模板不能超过5个");
+					}
+					t.setCreateId(user.getId());
+					t.setCreateTime(now);
+				}else{
+					SdvTemplate source = sdvTemplateService.selectEntry(t.getSourceId());
+					if(source!=null){
+						t.setCreateId(source.getCreateId());
+						t.setCreateTime(source.getCreateTime());
+					}
+				}
 			} else {
 				t.setUpdateId(user.getId());
 				t.setUpdateTime(now);
