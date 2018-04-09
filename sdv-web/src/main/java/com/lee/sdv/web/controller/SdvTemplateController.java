@@ -49,8 +49,7 @@ import com.lee.sdv.web.controller.interceptor.UserContext;
 @RestController
 @RequestMapping(value = "/api/sdvTemplate")
 public class SdvTemplateController {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(SdvTemplateController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SdvTemplateController.class);
 	@Autowired
 	private SdvTemplateService sdvTemplateService;
 	@Autowired
@@ -78,11 +77,16 @@ public class SdvTemplateController {
 			UserContext user = UserContext.getUserContext();
 			SdvTemplate condtion = new SdvTemplate();
 			condtion.setOwner(user.getId());
+			condtion.setIsDelete(null);
 			condtion.setName(t.getName());
 			SdvTemplate old = sdvTemplateService.selectOneEntry(condtion);
-			if (t.getIsDelete() != 1 && old != null
-					&& !old.getId().equals(t.getId())) {
-				return ResultMessage.failure("已存在同名的模板");
+			if (old != null) {
+				if (t.getId() == null) {
+					return ResultMessage.failure("已存在同名的模板");
+				}
+				if (t.getId() != null && !old.getId().equals(t.getId())) {
+					return ResultMessage.failure("已存在同名的模板");
+				}
 			}
 			Date now = new Date();
 			boolean isNew = false;
@@ -90,22 +94,21 @@ public class SdvTemplateController {
 				isNew = true;
 				t.setOwner(user.getId());
 				t.setIsDelete(0);
-				if(t.getSourceId() == null){
+				if (t.getSourceId() == null) {
 					// 新增模板不超过5个
 					condtion = new SdvTemplate();
 					condtion.setOwner(user.getId());
 					condtion.setIsDelete(null);
 					condtion.setSourceId(0l);
-					List<SdvTemplate> count = sdvTemplateService
-							.selectEntryList(condtion);
+					List<SdvTemplate> count = sdvTemplateService.selectEntryList(condtion);
 					if (count != null && count.size() >= 5) {
 						return ResultMessage.failure("创建的模板不能超过5个");
 					}
 					t.setCreateId(user.getId());
 					t.setCreateTime(now);
-				}else{
+				} else {
 					SdvTemplate source = sdvTemplateService.selectEntry(t.getSourceId());
-					if(source!=null){
+					if (source != null) {
 						t.setCreateId(source.getCreateId());
 						t.setCreateTime(source.getCreateTime());
 					}
@@ -125,8 +128,7 @@ public class SdvTemplateController {
 				}
 				SdvTemplateData condtion1 = new SdvTemplateData();
 				condtion1.setSdvTemplateId(t.getSourceId());
-				List<SdvTemplateData> datas = sdvTemplateDataService
-						.selectEntryList(condtion1);
+				List<SdvTemplateData> datas = sdvTemplateDataService.selectEntryList(condtion1);
 				Map<Long, Long> dataIdMap = new HashMap<Long, Long>();
 				if (!CollectionUtils.isEmpty(datas)) {
 					for (SdvTemplateData data : datas) {
@@ -143,8 +145,7 @@ public class SdvTemplateController {
 				}
 				SdvTemplateVisit condtion2 = new SdvTemplateVisit();
 				condtion2.setSdvTemplateId(t.getSourceId());
-				List<SdvTemplateVisit> visits = sdvTemplateVisitService
-						.selectEntryList(condtion2);
+				List<SdvTemplateVisit> visits = sdvTemplateVisitService.selectEntryList(condtion2);
 				if (!CollectionUtils.isEmpty(visits)) {
 					for (SdvTemplateVisit visit : visits) {
 						Long visitId = visit.getId();
@@ -157,14 +158,12 @@ public class SdvTemplateController {
 						sdvTemplateVisitService.insertEntry(visit);
 						TemplateVisitData condtion3 = new TemplateVisitData();
 						condtion3.setVisitId(visitId);
-						List<TemplateVisitData> visitDatas = templateVisitDataService
-								.selectEntryList(condtion3);
+						List<TemplateVisitData> visitDatas = templateVisitDataService.selectEntryList(condtion3);
 						if (!CollectionUtils.isEmpty(visitDatas)) {
 							for (TemplateVisitData visitData : visitDatas) {
 								visitData.setId(null);
 								visitData.setVisitId(visit.getId());
-								visitData.setDataId(dataIdMap.get(visitData
-										.getDataId()));
+								visitData.setDataId(dataIdMap.get(visitData.getDataId()));
 								visitData.setCreateId(user.getId());
 								visitData.setCreateTime(now);
 								visitData.setUpdateId(null);
@@ -250,24 +249,20 @@ public class SdvTemplateController {
 		if (t != null) {
 			SdvTemplateData condtion1 = new SdvTemplateData();
 			condtion1.setSdvTemplateId(t.getId());
-			List<SdvTemplateData> datas = sdvTemplateDataService
-					.selectEntryList(condtion1);
+			List<SdvTemplateData> datas = sdvTemplateDataService.selectEntryList(condtion1);
 			t.setDatas(TranslationUtil.translations(datas));
 			SdvTemplateVisit condtion2 = new SdvTemplateVisit();
 			condtion2.setSdvTemplateId(t.getId());
-			List<SdvTemplateVisit> visits = sdvTemplateVisitService
-					.selectEntryList(condtion2);
+			List<SdvTemplateVisit> visits = sdvTemplateVisitService.selectEntryList(condtion2);
 			t.setVisits(TranslationUtil.translations(visits));
 			if (!CollectionUtils.isEmpty(visits)) {
 				List<TemplateVisitData> visitDatas = new ArrayList<TemplateVisitData>();
 				for (SdvTemplateVisit visit : visits) {
 					TemplateVisitData condtion3 = new TemplateVisitData();
 					condtion3.setVisitId(visit.getId());
-					List<TemplateVisitData> visitData = templateVisitDataService
-							.selectEntryList(condtion3);
+					List<TemplateVisitData> visitData = templateVisitDataService.selectEntryList(condtion3);
 					if (!CollectionUtils.isEmpty(visitData)) {
-						visitDatas.addAll(TranslationUtil
-								.translations(visitData));
+						visitDatas.addAll(TranslationUtil.translations(visitData));
 					}
 				}
 				t.setVisitDatas(visitDatas);
@@ -304,16 +299,14 @@ public class SdvTemplateController {
 		ResultMessage<Boolean> result = ResultMessage.success();
 		result.setData(false);
 		SdvTemplate t = sdvTemplateService.selectEntry(id);
-		if (t != null
-				&& t.getOwner().equals(UserContext.getUserContext().getId())) {
+		if (t != null && t.getOwner().equals(UserContext.getUserContext().getId())) {
 			result.setData(true);
 		}
 		return result;
 	}
 
 	@PostMapping("/page")
-	public ResultMessage<Page<SdvTemplate>> getSdvTemplatePage(
-			@RequestBody SdvTemplate condtion) {
+	public ResultMessage<Page<SdvTemplate>> getSdvTemplatePage(@RequestBody SdvTemplate condtion) {
 		ResultMessage<Page<SdvTemplate>> result = ResultMessage.success();
 		UserContext user = UserContext.getUserContext();
 		if (user != null) {
