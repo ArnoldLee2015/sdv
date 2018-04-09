@@ -34,7 +34,7 @@
             <if test="owner!= null ">
                 <![CDATA[AND t.owner = #{owner}]]> /*模板拥有人*/
             </if>
-            <if test="sourceId!= null ">
+            <if test="sourceId!= null and sourceId!= 0">
                 <![CDATA[AND t.source_id = #{sourceId}]]> /*模板来源ID*/
             </if>
             <if test="sourceId== 0 ">

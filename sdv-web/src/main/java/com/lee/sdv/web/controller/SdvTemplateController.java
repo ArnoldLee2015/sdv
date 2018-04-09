@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Strings;
 import com.lee.sdv.domain.SdvPatient;
 import com.lee.sdv.domain.SdvTemplate;
 import com.lee.sdv.domain.SdvTemplateData;
@@ -75,17 +76,20 @@ public class SdvTemplateController {
 		ResultMessage<Long> result = ResultMessage.success();
 		try {
 			UserContext user = UserContext.getUserContext();
-			SdvTemplate condtion = new SdvTemplate();
-			condtion.setOwner(user.getId());
-			condtion.setIsDelete(null);
-			condtion.setName(t.getName());
-			SdvTemplate old = sdvTemplateService.selectOneEntry(condtion);
-			if (old != null) {
-				if (t.getId() == null) {
-					return ResultMessage.failure("已存在同名的模板");
-				}
-				if (t.getId() != null && !old.getId().equals(t.getId())) {
-					return ResultMessage.failure("已存在同名的模板");
+			
+			if(!Strings.isNullOrEmpty(t.getName())){
+				SdvTemplate condtion = new SdvTemplate();
+				condtion.setOwner(user.getId());
+				condtion.setIsDelete(null);
+				condtion.setName(t.getName());
+				SdvTemplate old = sdvTemplateService.selectOneEntry(condtion);
+				if (old != null) {
+					if (t.getId() == null) {
+						return ResultMessage.failure("已存在同名的模板");
+					}
+					if (t.getId() != null && !old.getId().equals(t.getId())) {
+						return ResultMessage.failure("已存在同名的模板");
+					}
 				}
 			}
 			Date now = new Date();
@@ -96,7 +100,7 @@ public class SdvTemplateController {
 				t.setIsDelete(0);
 				if (t.getSourceId() == null) {
 					// 新增模板不超过5个
-					condtion = new SdvTemplate();
+					SdvTemplate condtion = new SdvTemplate();
 					condtion.setOwner(user.getId());
 					condtion.setIsDelete(null);
 					condtion.setSourceId(0l);
