@@ -91,7 +91,7 @@ public class SdvTemplateController {
 				condtion = new SdvTemplate();
 				condtion.setOwner(user.getId());
 				condtion.setIsDelete(null);
-				// condtion.setSourceId(0l);
+				condtion.setSourceId(0l);
 				List<SdvTemplate> count = sdvTemplateService
 						.selectEntryList(condtion);
 				if (count != null && count.size() >= 5) {
