@@ -20,7 +20,8 @@
             t.update_id AS updateId,  /*修改人*/
             t.update_time AS updateTime,  /*修改时间*/
             t.email AS email,  /*邮箱*/
-            t.mobile AS mobile  /*手机*/
+            t.mobile AS mobile,  /*手机*/
+            t.headimgurl AS headimgurl /*微信头像*/
         ]]>
     </sql>
 
@@ -110,15 +111,16 @@
             <if test="updateTime!= null"><![CDATA[ t.update_time = #{updateTime}]]> /*修改时间*/,</if>
             <if test="email!= null"><![CDATA[ t.email = #{email}]]> /*邮箱*/,</if>
             <if test="mobile!= null"><![CDATA[ t.mobile = #{mobile}]]> /*手机*/,</if>
+            <if test="headimgurl!= null"><![CDATA[ t.headimgurl = #{headimgurl}]]> /*微信头像*/,</if>
         </set>
     </sql>
 
     <!-- 插入process_detail记录 -->
     <insert id="insertEntry" parameterType="com.lee.sdv.domain.SdvUser" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sdv_user
-        ( name,  wechat_account,open_id,union_id,session_key,local_session_key,expire_date,access_token,refresh_token,expires_in,  is_delete,  create_id,  create_time,  update_id,  update_time,email, mobile  )
+        ( name,  wechat_account,open_id,union_id,session_key,local_session_key,expire_date,access_token,refresh_token,expires_in,  is_delete,  create_id,  create_time,  update_id,  update_time,email, mobile,headimgurl  )
         VALUES
-        (#{name}  ,#{wechatAccount} ,#{openId},#{unionId},#{sessionKey},#{localSessionKey},#{expireDate},#{accessToken},#{refreshToken},#{expiresIn} ,#{isDelete}  ,#{createId}  ,#{createTime}  ,#{updateId}  ,#{updateTime}   ,#{email}   ,#{mobile}   )
+        (#{name}  ,#{wechatAccount} ,#{openId},#{unionId},#{sessionKey},#{localSessionKey},#{expireDate},#{accessToken},#{refreshToken},#{expiresIn} ,#{isDelete}  ,#{createId}  ,#{createTime}  ,#{updateId}  ,#{updateTime}   ,#{email}   ,#{mobile}   ,#{headimgurl})
     </insert>
 
     <!-- 删除记录,主键IN(array) -->

@@ -84,7 +84,10 @@ public class SdvUser extends BaseDomain {
 	 * 修改时间
 	 */
 	private Date updateTime;
-
+	/**
+	 * 微信头像URL
+	 */
+	private String headimgurl;
 	public SdvUser() {
 		// 默认无参构造方法
 	}
@@ -300,6 +303,14 @@ public class SdvUser extends BaseDomain {
 
 	public void setExpiresIn(String expiresIn) {
 		this.expiresIn = expiresIn;
+	}
+
+	public String getHeadimgurl() {
+		return headimgurl;
+	}
+
+	public void setHeadimgurl(String headimgurl) {
+		this.headimgurl = headimgurl;
 	}
 
 	/** 系统生成结束,请勿修改,重新生成会覆盖 */

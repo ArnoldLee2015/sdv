@@ -314,7 +314,7 @@ public class SdvTemplateController {
 		ResultMessage<Page<SdvTemplate>> result = ResultMessage.success();
 		UserContext user = UserContext.getUserContext();
 		if (user != null) {
-			condtion.setCreateId(user.getId());
+			condtion.setOwner(user.getId());
 		}
 		Page<SdvTemplate> page = sdvTemplateService.selectPage(condtion);
 		TranslationUtil.translations(page.getResult());
