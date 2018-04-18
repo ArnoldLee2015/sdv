@@ -118,6 +118,16 @@ public class WeiXinServiceImpl implements WeiXinService {
 			} else {
 				sdvUser = sdvUserManager.selectByOpenId(session.getOpenid());
 			}
+			String headimgurl = null;
+			String userInfoUrl = String.format(ApiConfig.accessToken2UserInfo,
+					session.getAccess_token(),apiConfig.getAppOpenId());
+			String userContent = WeixinUtil
+					.httpRequests(userInfoUrl, WeixinUtil.HTTP_GET, null);
+			if(!Strings.isNullOrEmpty(userContent)){
+				LOG.error("weixin userinfo msg:[{}]", userContent);
+				JSONObject userInfo = JSON.parseObject(userContent);
+				headimgurl = userInfo.getString("headimgurl");
+			}
 			if (sdvUser == null) {
 				sdvUser = new SdvUser();
 				sdvUser.setOpenId(session.getOpenid());
@@ -127,6 +137,7 @@ public class WeiXinServiceImpl implements WeiXinService {
 				sdvUser.setRefreshToken(session.getRefresh_token());
 				sdvUser.setExpiresIn(session.getExpires_in());
 				sdvUser.setIsDelete(0);
+				sdvUser.setHeadimgurl(headimgurl);
 				Calendar c = Calendar.getInstance();
 				sdvUser.setCreateTime(c.getTime());
 				c.add(Calendar.DAY_OF_YEAR, EXPIRE_DAYS);
@@ -145,6 +156,7 @@ public class WeiXinServiceImpl implements WeiXinService {
 				c.add(Calendar.DAY_OF_YEAR, EXPIRE_DAYS);
 				sdvUser.setExpireDate(c.getTime());
 				sdvUser.setWechatAccount(code);
+				sdvUser.setHeadimgurl(headimgurl);
 				sdvUserManager.updateByKey(sdvUser);
 			}
 			return sdvUser;
